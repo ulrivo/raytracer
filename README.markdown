@@ -26,6 +26,11 @@ ln -s ~/Dev/lisp/src/ ~/.local/share/common-lisp/source/
 
 ,in-package raytracer
 
+### Testing
+
+To run this test file, execute `(asdf:test-system :raytracer)' in your Lisp.
+
+
 ## Usage
 
 ## Installation
