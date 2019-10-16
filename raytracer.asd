@@ -6,8 +6,8 @@
   :serial t
   :components ((:module "src"
                 :components
-                ((:file "main")
-                 (:file "tuples"))))
+                ((:file "tuples")
+                 (:file "main"))))
   :description ""
   :in-order-to ((test-op (test-op "raytracer/tests"))))
 
