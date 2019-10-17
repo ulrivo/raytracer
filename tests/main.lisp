@@ -4,9 +4,10 @@
         :rove))
 (in-package :raytracer/tests/main)
 
-;; NOTE: To run this test file, execute `(asdf:test-system :raytracer)' in your Lisp.
+;; NOTE: To run this test file, execute `(asdf:test-system :raytracer)'
+;; in your Lisp.
 
-(deftest matrices
+(deftest matrix-multiplication
   (testing "correct matrix multiplication"
     (ok (equalp (mm
                  (make-array '(4 4) :initial-contents
@@ -24,6 +25,17 @@
                               (44 54 114 108)
                               (40 58 110 102)
                               (16 26 46 42))))))
+  (testing "correct matrix and vector multiplication"
+    (ok (equalp (mm
+                 (make-array '(4 4) :initial-contents
+                             '((1 2 3 4)
+                               (2 4 4 2)
+                               (8 6 4 1)
+                               (0 0 0 1)))
+                 (make-array '(4 1) :initial-contents
+                             '((1) (2) (3) (1))))
+                (make-array '(4 1) :initial-contents
+                            '((18) (24) (33) (1))))))
   (testing "error with incompatible matrices"
     (ok (signals (raytracer:mm
                   (make-array '(4 4) :initial-contents
