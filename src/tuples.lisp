@@ -1,3 +1,7 @@
+(defpackage raytracer
+  (:export :mm)
+  (:use :cl))
+
 (in-package :raytracer)
 
 ;; point, vectorr
@@ -9,14 +13,14 @@
   (make-array 4 :initial-contents (list x y z 0)))
 
 ;; tuple additon and subtraciton
-(defun tadd (x y)
-  (map 'vector #'+ x y))
+(defun tadd (v w)
+  (map 'vector #'+ v w))
 
-(defun tsub (x y)
-  (map 'vector #'- x y))
+(defun tsub (v w)
+  (map 'vector #'- v w))
 
-(defun tnegate (x)
-  (tsub (vector 0 0 0) x))
+(defun tnegate (v)
+  (tsub (vectorr 0 0 0) v))
 
 (defconstant +epsilon+ 0.00001)
 
@@ -27,11 +31,11 @@
 
 ;; scalar multiplication division
 
-(defun mults (x s)
-  (map 'vector (lambda (c)(* c s)) x))
+(defun mults (v s)
+  (map 'vector (lambda (c)(* c s)) v))
 
-(defun divs (x s)
-  (map 'vector (lambda (c)(/ c s)) x))
+(defun divs (v s)
+  (map 'vector (lambda (c)(/ c s)) v))
 
 ;; magnitude
 
@@ -63,8 +67,9 @@
 
 ;; canvas
 
-(defun canvas (w h)
-  (make-array (list w h) :initial-element (vector 0 0 0)))
+(defun canvas (width height)
+  (make-array (list width height)
+              :initial-element (vector 0 0 0)))
 
 (defun write-pixel (canvas x y color)
   (let* ((dimension (array-dimensions canvas))
@@ -101,9 +106,9 @@
                    (concatenate
                     'string
                     data s))))
-      (dotimes (i w)
+      (dotimes (j h)
         (let ((line nil))
-          (dotimes (j h)
+          (dotimes (i w)
             (let ((col (aref canvas i j)))
               (dotimes (k 3)
                 (push (truncate (* 255 (elt col k))) line))))

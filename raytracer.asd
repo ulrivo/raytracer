@@ -3,12 +3,12 @@
   :author "Ulrich Vollert <lisp@ulrivo.de"
   :license ""
   :depends-on ()
-  :serial t
   :components ((:module "src"
                 :components
                 ((:file "tuples")
+                 (:file "matrices")
                  (:file "main"))))
-  :description ""
+  :description "Raytracer by Jamis Buck"
   :in-order-to ((test-op (test-op "raytracer/tests"))))
 
 (defsystem "raytracer/tests"
