@@ -86,3 +86,11 @@
         (dotimes (c d1)
           (setf (aref result c r) (/ (cofactor m r c) det))))
       result)))
+
+(defun translate (x y z)
+  (make-array '(4 4)
+              :initial-contents
+              '((1 0 0 x)
+                (0 1 0 y)
+                (0 0 1 z)
+                (0 0 0 1))))

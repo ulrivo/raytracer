@@ -32,10 +32,8 @@
                                (2 4 4 2)
                                (8 6 4 1)
                                (0 0 0 1)))
-                 (make-array '(4 1) :initial-contents
-                             '((1) (2) (3) (1))))
-                (make-array '(4 1) :initial-contents
-                            '((18) (24) (33) (1))))))
+                 (point 1 2 3))
+                (point 18 24 33))))
   (testing "error with incompatible matrices"
     (ok (signals (mm
                   (make-array '(4 4) :initial-contents
@@ -147,3 +145,11 @@
                        ( -0.80827 -1.45677 -0.44361 0.52068 )
                        ( -0.07895 -0.22368 -0.05263 0.19737 )
                        ( -0.52256 -0.81391 -0.30075 0.30639 ))))))))
+
+(deftest translate
+    (testing "translation"
+             (ok (equalp
+                  (let ((transform (translate 5 -3 2))
+                        (p (point -3 4 5)))
+                    (mm transform p))
+                  (point 2 1 7)))))
