@@ -18,3 +18,23 @@
                     (incf s (* (aref a i k) (aref b k j))))
             (setf (aref result i j) s))))
       result)))
+
+(defconstant +identity-matrix+
+  (make-array '(4 4)
+              :initial-contents
+              '((1 0 0 0)
+                (0 1 0 0)
+                (0 0 1 0)
+                (0 0 0 1))))
+
+(defun transpose (m)
+  (let* ((dim (array-dimensions m))
+         (d1 (first dim))
+         (d2 (second dim)))
+    (when (/= 2 (length dim))
+      (error "transpose only for 2-dimensional matrices"))
+    (let ((result (make-array (list d2 d1))))
+      (dotimes (i d1)
+        (dotimes (j d2)
+          (setf (aref result j i) (aref m i j))))
+      result)))
