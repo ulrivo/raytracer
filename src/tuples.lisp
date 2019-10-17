@@ -1,5 +1,12 @@
 (defpackage raytracer
-  (:export :mm)
+  (:export
+     :approximately
+     :mm
+     :determinant
+     :submatrix
+     :minor
+     :cofactor
+     :inverse)
   (:use :cl))
 
 (in-package :raytracer)

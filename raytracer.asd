@@ -18,6 +18,7 @@
                "rove")
   :components ((:module "tests"
                 :components
-                ((:file "main"))))
+                ((:file "matrices")
+                 (:file "main"))))
   :description "Test system for raytracer"
   :perform (test-op (op c) (symbol-call :rove :run c)))
