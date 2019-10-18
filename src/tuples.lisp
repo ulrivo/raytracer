@@ -15,6 +15,13 @@
      :rotation-y
      :rotation-z
      :shearing
+     :make-ray
+     :ray-position
+     :make-sphere
+     :intersect
+     :make-intersektion
+     :intersektion-tt
+     :intersektion-object
      )
   (:use :cl))
 
