@@ -200,3 +200,53 @@
                (p (point 0 1 0 )))
            (mm full-quarter p))
          (point -1 0 0)))))
+
+
+(deftest shearing
+  (testing "shearing, moves x in proportion to z"
+    (testing "shearing, moves x in proportion to y"
+      (ok (approximately
+           (let ((transform (shearing 1 0 0 0 0 0))
+                 (p (point 2 3 4)))
+             (mm transform p))
+           (point 5 3 4))))
+    (testing "shearing, moves x in proportion to z"
+      (ok (approximately
+           (let ((transform (shearing 0 1 0 0 0 0))
+                 (p (point 2 3 4)))
+             (mm transform p))
+           (point 6 3 4))))
+    (testing "shearing, moves y in proportion to x"
+      (ok (approximately
+           (let ((transform (shearing 0 0 1 0 0 0))
+                 (p (point 2 3 4)))
+             (mm transform p))
+           (point 2 5 4))))
+    (testing "shearing, moves y in proportion to z"
+      (ok (approximately
+           (let ((transform (shearing 0 0 0 1 0 0))
+                 (p (point 2 3 4)))
+             (mm transform p))
+           (point 2 7 4))))
+    (testing "shearing, moves z in proportion to x"
+      (ok (approximately
+           (let ((transform (shearing 0 0 0 0 1 0))
+                 (p (point 2 3 4)))
+             (mm transform p))
+           (point 2 3 6))))
+    (testing "shearing, moves z in proportion to y"
+      (ok (approximately
+           (let ((transform (shearing 0 0 0 0 0 1))
+                 (p (point 2 3 4)))
+             (mm transform p))
+           (point 2 3 7))))))
+
+(deftest combining
+  (testing "combining transformation matrices"
+    (ok (equalp
+         (let ((p (point 1 0 1))
+               (a (rotation-x (/ pi 2)))
+               (b (scaling 5 5 5))
+               (c (translation 10 5 7)))
+           (mm c (mm b (mm a p))))
+         (point 15 0 7)))))

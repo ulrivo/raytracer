@@ -138,5 +138,15 @@
                (list (cos r) (- (sin r)) 0 0)
                (list (sin r) (cos r) 0 0 )
                (list 0 0 1 0)
+               (list 0 0 0 1))))
+
+(defun shearing (xy xz yx yz zx zy)
+  (make-array '(4 4)
+              :initial-contents
+              (list
+               (list 1 xy xz 0)
+               (list yx 1 yz 0)
+               (list zx zy 1 0)
                (list 0 0 0 1)))) 
+
 

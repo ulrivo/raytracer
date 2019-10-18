@@ -14,6 +14,7 @@
      :rotation-x
      :rotation-y
      :rotation-z
+     :shearing
      )
   (:use :cl))
 
