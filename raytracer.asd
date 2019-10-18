@@ -3,7 +3,6 @@
   :author "Ulrich Vollert <lisp@ulrivo.de>"
   :license ""
   :depends-on ()
-  :serial t
   :components ((:module "src"
                 :components
                 ((:file "package")
