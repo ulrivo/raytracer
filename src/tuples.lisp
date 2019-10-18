@@ -20,10 +20,25 @@
 
 (defconstant +epsilon+ 0.00001)
 
+(defun 2d-array-to-list (array)
+  (apply #'append 
+         (loop for i below (array-dimension array 0)
+               collect (loop for j below (array-dimension array 1)
+                             collect (aref array i j)))))
+
 (defun approximately (v w)
-  (loop for element in (map 'list (lambda (x)
-                    (< (abs x) +epsilon+))
-            (tsub v w)) always element))
+  (flet ((simple-arrayp (a)
+           (eql 'simple-array (car (type-of a)))))
+    (let ((r v)
+          (s w))
+      (when (simple-arrayp v)
+        (setf r (2d-array-to-list v)))
+      (when (simple-arrayp w)
+        (setf s (2d-array-to-list w)))
+      (loop for element in
+                        (map 'list (lambda (x)
+                                     (< (abs x) +epsilon+))
+                             (tsub r s)) always element))))
 
 ;; scalar multiplication division
 
