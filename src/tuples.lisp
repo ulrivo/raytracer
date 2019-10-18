@@ -9,7 +9,12 @@
      :minor
      :cofactor
      :inverse
-     :translate)
+     :translation
+     :scaling
+     :rotation-x
+     :rotation-y
+     :rotation-z
+     )
   (:use :cl))
 
 (in-package :raytracer)
@@ -41,15 +46,18 @@
                              collect (aref array i j)))))
 
 (defun approximately (v w)
-  (let ((r v)
-        (s w))
-    (when (arrayp v)
-      (setf r (2d-array-to-list v)))
-    (when (arrayp w)
-      (setf s (2d-array-to-list w)))
-    (loop for element in (map 'list (lambda (x)
-                                      (< (abs x) +epsilon+))
-                              (tsub r s)) always element)))
+  (flet ((simple-arrayp (a)
+           (eql 'simple-array (car (type-of a)))))
+    (let ((r v)
+          (s w))
+      (when (simple-arrayp v)
+        (setf r (2d-array-to-list v)))
+      (when (simple-arrayp w)
+        (setf s (2d-array-to-list w)))
+      (loop for element in
+                        (map 'list (lambda (x)
+                                     (< (abs x) +epsilon+))
+                             (tsub r s)) always element))))
 
 ;; scalar multiplication division
 

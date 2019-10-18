@@ -95,11 +95,48 @@
           (setf (aref result c r) (/ (cofactor m r c) det))))
       result)))
 
-(defun translate (x y z)
+(defun translation (x y z)
   (make-array '(4 4)
               :initial-contents
               (list
-                (list 1 0 0 x)
-                (list 0 1 0 y)
-                (list 0 0 1 z)
-                (list 0 0 0 1))))
+               (list 1 0 0 x)
+               (list 0 1 0 y)
+               (list 0 0 1 z)
+               (list 0 0 0 1))))
+
+(defun scaling (x y z)
+  (make-array '(4 4)
+              :initial-contents
+              (list
+               (list x 0 0 0)
+               (list 0 y 0 0)
+               (list 0 0 z 0)
+               (list 0 0 0 1))))
+
+(defun rotation-x (r)
+  (make-array '(4 4)
+              :initial-contents
+              (list
+               (list 1 0 0 0)
+               (list 0 (cos r) (- (sin r)) 0)
+               (list 0 (sin r) (cos r) 0)
+               (list 0 0 0 1))))
+
+(defun rotation-y (r)
+  (make-array '(4 4)
+              :initial-contents
+              (list
+               (list (cos r) 0 (sin r) 0)
+               (list 0 1 0 0)
+               (list (- (sin r)) 0 (cos r) 0)
+               (list 0 0 0 1))))
+
+(defun rotation-z (r)
+  (make-array '(4 4)
+              :initial-contents
+              (list
+               (list (cos r) (- (sin r)) 0 0)
+               (list (sin r) (cos r) 0 0 )
+               (list 0 0 1 0)
+               (list 0 0 0 1)))) 
+
