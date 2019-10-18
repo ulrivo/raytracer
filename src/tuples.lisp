@@ -1,16 +1,3 @@
-(defpackage raytracer
-  (:export
-     :approximately
-     :point
-     :mm
-     :determinant
-     :submatrix
-     :minor
-     :cofactor
-     :inverse
-     :translate)
-  (:use :cl))
-
 (in-package :raytracer)
 
 ;; point, vectorr

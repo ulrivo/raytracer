@@ -3,9 +3,11 @@
   :author "Ulrich Vollert <lisp@ulrivo.de"
   :license ""
   :depends-on ()
+  :serial t
   :components ((:module "src"
                 :components
-                ((:file "tuples")
+                ((:file "package")
+                 (:file "tuples")
                  (:file "matrices")
                  (:file "main"))))
   :description "Raytracer by Jamis Buck"
