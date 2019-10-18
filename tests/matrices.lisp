@@ -117,12 +117,6 @@
                 0 0)
          -12))))
 
-(defun 2d-array-to-list (array)
-  (apply #'append 
-  (loop for i below (array-dimension array 0)
-        collect (loop for j below (array-dimension array 1)
-                      collect (aref array i j)))))
-
 (deftest inverse
   (testing "error when determinant is zero"
     (ok (signals
@@ -133,18 +127,18 @@
                               (6 -1 5)))))))
   (testing "inverse of a 4x4-matrix"
     (ok (approximately
-         (2d-array-to-list (inverse (make-array '(4 4)
+         (inverse (make-array '(4 4)
                             :initial-contents
                             '((-5 2 6 -8)
                               (1 -5 1 8)
                               (7 7 -6 -7)
-                              (1 -3 7 4)))))
-         (2d-array-to-list (make-array '(4 4)
+                              (1 -3 7 4))))
+         (make-array '(4 4)
                      :initial-contents
                      '(( 0.21805 0.45113 0.24060 -0.04511 )
                        ( -0.80827 -1.45677 -0.44361 0.52068 )
                        ( -0.07895 -0.22368 -0.05263 0.19737 )
-                       ( -0.52256 -0.81391 -0.30075 0.30639 ))))))))
+                       ( -0.52256 -0.81391 -0.30075 0.30639 )))))))
 
 (deftest translate
     (testing "translation"
@@ -152,4 +146,10 @@
                   (let ((transform (translate 5 -3 2))
                         (p (point -3 4 5)))
                     (mm transform p))
-                  (point 2 1 7)))))
+                  (point 2 1 7))))
+    (testing "no translation of vectors"
+             (ok (equalp
+                  (let ((transform (translate 5 -3 2))
+                        (v (vectorr -3 4 5)))
+                    (mm transform v))
+                  (vectorr -3 4 5)))))
