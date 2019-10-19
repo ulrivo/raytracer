@@ -21,8 +21,11 @@
      #:intersektion-tt
      #:intersektion-object
      #:ray-position
+     #:ray-origin
+     #:ray-direction
      #:intersect
      #:hit
+     #:transform
      )
   (:use #:cl))
 

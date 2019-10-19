@@ -39,3 +39,8 @@
                      (< (intersektion-tt i) (intersektion-tt mini))))
         (setf mini i)))
     mini))
+
+(defun transform (ray matrix)
+  (make-ray
+   :origin (mm matrix (ray-origin ray))
+   :direction (mm matrix (ray-direction ray))))
