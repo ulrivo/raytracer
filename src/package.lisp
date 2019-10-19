@@ -22,6 +22,7 @@
      #:intersektion-object
      #:ray-position
      #:intersect
+     #:hit
      )
   (:use #:cl))
 

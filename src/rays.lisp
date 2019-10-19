@@ -29,3 +29,13 @@
           (list
            (make-intersektion :tt t1 :object sphere)
            (make-intersektion :tt t2 :object sphere))))))
+
+;; answer the intersection with the minimum of the non-negative tt-values
+(defun hit (intersektions)
+  (let ((mini nil))
+    (dolist (i intersektions)
+      (when (and (< 0 (intersektion-tt i))
+                 (or (null mini)
+                     (< (intersektion-tt i) (intersektion-tt mini))))
+        (setf mini i)))
+    mini))
