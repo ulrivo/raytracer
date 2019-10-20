@@ -46,3 +46,5 @@
         (setf mini i)))
     mini))
 
+(defun normal-at (sphere p)
+  (normalize (tsub p (point 0 0 0))))

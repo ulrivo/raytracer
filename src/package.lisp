@@ -28,6 +28,6 @@
      #:hit
      #:transform
      #:draw
+     #:normal-at
      )
   (:use #:cl))
-

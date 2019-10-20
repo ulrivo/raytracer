@@ -100,3 +100,18 @@
                    (and (= 2 (length xs))
                         (= 3 (intersektion-tt (first xs)))
                         (= 7 (intersektion-tt (second xs)))))))))
+(deftest normal-on-sphere
+    (let ((s (make-sphere)))
+          (testing "normal on sphere at a point on the x axis"
+                   (ok (let ((n (normal-at s (point 1 0 0))))
+                         (equalp n (vectorr 1 0 0)))))
+          (testing "normal on sphere at a point on the y axis"
+                   (ok (let ((n (normal-at s (point 0 1 0))))
+                         (equalp n (vectorr 0 1 0)))))
+          (testing "normal on sphere at a point on the z axis"
+                   (ok (let ((n (normal-at s (point 0 0 1))))
+                         (equalp n (vectorr 0 0 1)))))
+          (testing "normal on sphere at a nonaxial point on the x axis"
+                   (ok (let* ((sq3 (/ (sqrt 3) 3))
+                              (n (normal-at s (point sq3 sq3 sq3))))
+                         (approximately n (vectorr sq3 sq3 sq3)))))))

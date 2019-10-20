@@ -22,3 +22,4 @@
             (when (hit xs)
               (write-pixel canvas x y color))))))
     (save-canvas canvas "sphere1.ppm")))
+
