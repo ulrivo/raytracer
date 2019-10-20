@@ -1,7 +1,3 @@
-(defpackage raytracer/tests/matrices
-  (:use :cl
-   :raytracer
-        :rove))
 (in-package :raytracer/tests/matrices)
 
 ;; NOTE: To run this test file, execute `(asdf:test-system :raytracer)'

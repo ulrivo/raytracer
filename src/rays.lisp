@@ -6,7 +6,7 @@
 
 (defstruct sphere
   (origin (point 0 0 0))
-  (radius 1))
+  (transform *identity-matrix*))
 
 (defstruct intersektion
   (tt 0)
@@ -15,11 +15,17 @@
 (defun ray-position (ray s)
   (tadd (ray-origin ray) (mults (ray-direction ray) s)))
 
+(defun transform (ray matrix)
+  (make-ray
+   :origin (mm matrix (ray-origin ray))
+   :direction (mm matrix (ray-direction ray))))
+
 ;; answers an intersektion
 (defun intersect (sphere ray)
-  (let* ((sphere-to-ray (tsub (ray-origin ray) (sphere-origin sphere)))
-         (a (dot (ray-direction ray) (ray-direction ray)))
-         (b (* 2 (dot (ray-direction ray) sphere-to-ray)))
+  (let* ((ray2 (transform ray (inverse (sphere-transform sphere))))
+         (sphere-to-ray (tsub (ray-origin ray2) (sphere-origin sphere)))
+         (a (dot (ray-direction ray2) (ray-direction ray2)))
+         (b (* 2 (dot (ray-direction ray2) sphere-to-ray)))
          (c (1- (dot sphere-to-ray sphere-to-ray)))
          (discriminant (- (* b b) (* 4 a c))))
     (if (> 0 discriminant)
@@ -40,7 +46,3 @@
         (setf mini i)))
     mini))
 
-(defun transform (ray matrix)
-  (make-ray
-   :origin (mm matrix (ray-origin ray))
-   :direction (mm matrix (ray-direction ray))))

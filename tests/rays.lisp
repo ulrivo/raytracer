@@ -1,7 +1,3 @@
-(defpackage raytracer/tests/rays
-  (:use :cl
-   :raytracer
-        :rove))
 (in-package :raytracer/tests/rays)
 
 ;; NOTE: To run this test file, execute `(asdf:test-system :raytracer)'
@@ -94,3 +90,13 @@
                 (r2 (transform ray m)))
             (and (equalp (ray-origin r2) (point 2 6 12))
                  (equalp (ray-direction r2) (vectorr 0 3 0))))))))
+
+(deftest transform-sphere
+  (let ((ray (make-ray :origin (point 0 0 -5) :direction (vectorr 0 0 1))))
+    (testing "intersecting a scaled sphere with a ray"
+             (ok (let* ((s (make-sphere :transform (scaling 2 2 2)))
+                        (xs (intersect s ray)))
+                   (princ xs)
+                   (and (= 2 (length xs))
+                        (= 3 (intersektion-tt (first xs)))
+                        (= 7 (intersektion-tt (second xs)))))))))

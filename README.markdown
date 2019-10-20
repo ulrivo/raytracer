@@ -30,6 +30,13 @@ ln -s ~/Dev/lisp/src/ ~/.local/share/common-lisp/source/
 
 To run this test file, execute `(asdf:test-system :raytracer)' in your Lisp.
 
+Or, start stand-alone SBCL, load test-package
+
+(ql:quickload :raytracer/tests)
+
+and run tests with
+
+(run :raytracer/tests)
 
 ## Usage
 

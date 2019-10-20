@@ -20,7 +20,8 @@
                "rove")
   :components ((:module "tests"
                 :components
-                ((:file "matrices")
+                ((:file "package")
+                 (:file "matrices")
                  (:file "rays")
                  (:file "main"))))
   :description "Test system for raytracer"

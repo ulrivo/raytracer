@@ -17,6 +17,7 @@
      #:shearing
      #:make-ray
      #:make-sphere
+     #:sphere-transform
      #:make-intersektion
      #:intersektion-tt
      #:intersektion-object
