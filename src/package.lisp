@@ -27,6 +27,7 @@
      #:intersect
      #:hit
      #:transform
+     #:draw
      )
   (:use #:cl))
 
