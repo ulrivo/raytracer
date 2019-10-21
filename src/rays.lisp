@@ -5,7 +5,6 @@
   (direction (vectorr 0 0 1)))
 
 (defstruct sphere
-  (origin (point 0 0 0))
   (transform *identity-matrix*))
 
 (defstruct intersektion
@@ -23,7 +22,7 @@
 ;; answers an intersektion
 (defun intersect (sphere ray)
   (let* ((ray2 (transform ray (inverse (sphere-transform sphere))))
-         (sphere-to-ray (tsub (ray-origin ray2) (sphere-origin sphere)))
+         (sphere-to-ray (tsub (ray-origin ray2) (point 0 0 0)))
          (a (dot (ray-direction ray2) (ray-direction ray2)))
          (b (* 2 (dot (ray-direction ray2) sphere-to-ray)))
          (c (1- (dot sphere-to-ray sphere-to-ray)))
@@ -46,5 +45,10 @@
         (setf mini i)))
     mini))
 
-(defun normal-at (sphere p)
-  (normalize (tsub p (point 0 0 0))))
+(defun normal-at (sphere world-point)
+  (let* ((inv (inverse (sphere-transform sphere)))
+         (object-point (mm inv world-point))
+         (object-normal (tsub object-point (point 0 0 0)))
+         (world-normal (mm (transpose inv) object-normal)))
+    (setf (aref world-normal 3) 0)
+    (normalize world-normal)))

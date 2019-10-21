@@ -36,8 +36,9 @@ Or, start stand-alone SBCL, load test-package
 
 and run tests with
 
-(run :raytracer/tests)
+(rove:run :raytracer/tests)
 
 ## Usage
 
 ## Installation
+ 

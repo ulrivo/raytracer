@@ -115,3 +115,14 @@
                    (ok (let* ((sq3 (/ (sqrt 3) 3))
                               (n (normal-at s (point sq3 sq3 sq3))))
                          (approximately n (vectorr sq3 sq3 sq3)))))))
+
+(deftest normal-on-transformed-sphere
+    (testing "normal on a translated sphere"
+             (ok (let* ((s (make-sphere :transform (translation 0 1 0)))
+                        (n (normal-at s (point 0 1.70711 -0.70711))))
+                   (approximately n (vectorr 0 0.70711 -0.70711)))))
+  (testing "normal on a transformed sphere"
+           (ok (let* ((m (mm (scaling 1 0.5 1) (rotation-z (/ pi 5))))
+                      (s (make-sphere :transform m))
+                      (n (normal-at s (point 0 (/ (sqrt 2) 2) (- (/ (sqrt 2) 2))))))
+                 (approximately n (vectorr 0 0.97014 -0.24254))))))
