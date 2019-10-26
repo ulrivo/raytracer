@@ -1,33 +1,46 @@
 (defpackage #:raytracer
   (:export
      #:approximately
-     #:point
-     #:vectorr
-     #:mm
-     #:determinant
-     #:submatrix
-     #:minor
      #:cofactor
+     #:color
+     #:determinant
+     #:draw
+     #:hit
+     #:intersect
+     #:intersektion-object
+     #:intersektion-tt
      #:inverse
-     #:translation
-     #:scaling
+     #:light-intensity
+     #:light-position
+     #:lighting
+     #:make-intersektion
+     #:make-light
+     #:make-material
+     #:make-ray
+     #:make-sphere
+     #:material-ambient
+     #:material-color
+     #:material-diffuse
+     #:material-shininess
+     #:material-specular
+     #:minor
+     #:mm
+     #:normal-at
+     #:point
+     #:ray-direction
+     #:ray-origin
+     #:ray-position
+     #:reflect
      #:rotation-x
      #:rotation-y
      #:rotation-z
+     #:scaling
      #:shearing
-     #:make-ray
-     #:make-sphere
+     #:sphere-material 
      #:sphere-transform
-     #:make-intersektion
-     #:intersektion-tt
-     #:intersektion-object
-     #:ray-position
-     #:ray-origin
-     #:ray-direction
-     #:intersect
-     #:hit
+     #:submatrix
      #:transform
-     #:draw
-     #:normal-at
+     #:translation
+     #:vectorr
      )
   (:use #:cl))

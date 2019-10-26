@@ -100,6 +100,7 @@
                      (and (= 2 (length xs))
                           (= 3 (intersektion-tt (first xs)))
                           (= 7 (intersektion-tt (second xs)))))))))
+
 (deftest normal-on-sphere
     (let ((s (make-sphere)))
       (testing "normal on sphere at a point on the x axis"
@@ -126,3 +127,51 @@
                       (s (make-sphere :transform m))
                       (n (normal-at s (point 0 (/ (sqrt 2) 2) (- (/ (sqrt 2) 2))))))
                  (approximately n (vectorr 0 0.97014 -0.24254))))))
+
+(deftest reflection
+    (testing "reflect a vector approaching at 45 degree"
+             (ok (let* ((v (vectorr 1 -1 0))
+                        (n (vectorr 0 1 0))
+                        (r (reflect v n)))
+                   (equalp r (vectorr 1 1 0)))))
+  (testing "reflect off a slanted surface" 
+           (ok (let* ((v (vectorr 0 -1 0))
+                      (sq2 (/ (sqrt 2) 2))
+                      (n (vectorr sq2 sq2 0))
+                      (r (reflect v n)))
+                 (approximately r (vectorr 1 0 0))))))
+
+(deftest material
+    (let ((m (make-material))
+          (position (point 0 0 0)))
+      (testing "lighting with the eye between the light and the surface"
+               (ok (let* ((eyev (vectorr 0 0 -1))
+                          (normalv (vectorr 0 0 -1))
+                          (light (make-light :position (point 0 0 -10)))
+                          (result (lighting m light position eyev normalv)))
+                     (equalp result (color 1.9 1.9 1.9)))))
+      (testing "lighting with the eye between the light and the surface, eye offset 45 degree"
+               (ok (let* ((eyev (vectorr 0 (/ (sqrt 2) 2) (- (/ (sqrt 2) 2))))
+                          (normalv (vectorr 0 0 -1))
+                          (light (make-light :position (point 0 0 -10)))
+                          (result (lighting m light position eyev normalv)))
+                     (equalp result (color 1 1 1)))))
+      (testing "lighting with the eye opposite surface, eye offset 45 degree"
+               (ok (let* ((eyev (vectorr 0 0 -1))
+                          (normalv (vectorr 0 0 -1))
+                          (light (make-light :position (point 0 10 -10)))
+                          (result (lighting m light position eyev normalv)))
+                     (approximately result (color 0.7364 0.7364 0.7364)))))
+      (testing "lighting with the eye in the path of the reflection vector"
+               (ok (let* ((sq2 (- (/ (sqrt 2) 2)))
+                          (eyev (vectorr 0 sq2 sq2))
+                          (normalv (vectorr 0 0 -1))
+                          (light (make-light :position (point 0 0 -10)))
+                          (result (lighting m light position eyev normalv)))
+                     (approximately result (color 1.6364 1.6364 1.6364)))))
+      (testing "lighting with the eye behind the surface"
+               (ok (let* ((eyev (vectorr 0 0 -1))
+                          (normalv (vectorr 0 0 -1))
+                          (light (make-light :position (point 0 0 -10)))
+                          (result (lighting m light position eyev normalv)))
+                   (approximately result (color 0.1 0.1 0.1)))))))

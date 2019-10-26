@@ -5,11 +5,23 @@
   (direction (vectorr 0 0 1)))
 
 (defstruct sphere
-  (transform *identity-matrix*))
+  (transform *identity-matrix*)
+  material)
 
 (defstruct intersektion
   (tt 0)
   (object (make-sphere)))
+
+(defstruct light
+  (position (point 0 0 0))
+  (intensity (color 1 1 1)))
+
+(defstruct material
+  (color (color 1 1 1))
+  (ambient 0.1)
+  (diffuse 0.9)
+  (specular 0.9)
+  (shininess 200))
 
 (defun ray-position (ray s)
   (tadd (ray-origin ray) (mults (ray-direction ray) s)))
@@ -52,3 +64,26 @@
          (world-normal (mm (transpose inv) object-normal)))
     (setf (aref world-normal 3) 0)
     (normalize world-normal)))
+
+(defun reflect (in normal)
+  (tsub in (mults normal (* 2 (dot in normal)))))
+
+(defun lighting (material light point eyev normalv)
+  (let* ((effective-color (hadamard-product (material-color material)
+                                            (light-intensity light)))
+         (lightv (normalize (tsub (light-position light)
+                                  point)))
+         (ambient (mults effective-color (material-ambient material)))
+         (light-dot-normal (dot lightv normalv)))
+    (let* ((diffuse (color 0 0 0))
+           (specular (color 0 0 0)))
+      (when (<=  0 light-dot-normal)
+        (let* ((reflectv (reflect (mults lightv -1) normalv))
+               (reflect-dot-eye (dot reflectv eyev)))
+          (when (> reflect-dot-eye 0)
+            (let ((factor (expt reflect-dot-eye (material-shininess material))))
+              (setf specular (mults
+                              (light-intensity light)
+                              (* (material-specular material)
+                                     factor)))))))
+      (tadd ambient (tadd diffuse specular)))))
