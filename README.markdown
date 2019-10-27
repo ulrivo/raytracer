@@ -38,7 +38,13 @@ and run tests with
 
 (rove:run :raytracer/tests)
 
+
 ## Usage
+### Debugging
+
+Turn off optimiztions to see all steps in (step (function....)):
+
+(declaim (optimize (speed 0) (space 0) (debug 3)))
 
 ## Installation
  
