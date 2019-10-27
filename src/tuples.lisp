@@ -122,7 +122,7 @@
           (dotimes (i w)
             (let ((col (aref canvas i j)))
               (dotimes (k 3)
-                (push (truncate (* 255 (elt col k))) line))))
+                (push (min 255 (truncate (* 255 (elt col k)))) line))))
           (concat (no-longer (format nil "~{~A ~}~%" (reverse line)))))))
     data))
 

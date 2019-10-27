@@ -19,7 +19,7 @@
      #:make-ray
      #:make-sphere
      #:material-ambient
-     #:material-color
+     #:material-colour
      #:material-diffuse
      #:material-shininess
      #:material-specular
