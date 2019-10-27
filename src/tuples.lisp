@@ -1,5 +1,15 @@
 (in-package :raytracer)
 
+(defconstant +white+ (vector 1. 1. 1. ))
+(defconstant +black+ (vector 0. 0. 0. ))
+(defconstant +red+ (vector 1. 0. 0. ))
+(defconstant +green+ (vector 0. 1. 0. ))
+(defconstant +blue+ (vector 0. 0. 1. ))
+(defconstant +yellow+ (vector 1. 1. 0. ))
+(defconstant +lime+ (vector 0.749 1. 0. ))
+(defconstant +pink+ (vector 0.957 0.76 0.76 ))
+(defconstant +orange+ (vector 1. 0.5 0. ))
+
 ;; point, vectorr
 
 (defun point (x y z)
