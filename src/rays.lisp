@@ -78,6 +78,9 @@
     (let* ((diffuse (color 0 0 0))
            (specular (color 0 0 0)))
       (when (<=  0 light-dot-normal)
+        (setf diffuse (mults effective-color
+                             (* (material-diffuse material)
+                                light-dot-normal)))
         (let* ((reflectv (reflect (mults lightv -1) normalv))
                (reflect-dot-eye (dot reflectv eyev)))
           (when (> reflect-dot-eye 0)
