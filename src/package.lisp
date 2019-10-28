@@ -3,6 +3,12 @@
      #:approximately
      #:cofactor
      #:color
+     #:computations
+     #:computations-tt
+     #:computations-object
+     #:computations-point
+     #:computations-eyev
+     #:computations-normalv
      #:determinant
      #:draw
      #:hit
@@ -14,6 +20,7 @@
      #:light-intensity
      #:light-position
      #:lighting
+     #:make-computations
      #:make-intersektion
      #:make-light
      #:make-material
@@ -29,6 +36,7 @@
      #:mm
      #:normal-at
      #:point
+     #:prepare-computations
      #:ray-direction
      #:ray-origin
      #:ray-position

@@ -37,6 +37,9 @@
             :material (make-material)
             :transform (scaling 0.5 0.5 0.5)))))
 
+(defstruct computations
+  tt object point eyev normalv )
+
 (defun ray-position (ray s)
   (tadd (ray-origin ray) (mults (ray-direction ray) s)))
 
@@ -113,3 +116,14 @@
          (lambda (s) (intersect s ray))
          (world-shapes world))
         #'< :key #'intersektion-tt))
+
+(defun prepare-computations (intersektion ray)
+  (let* ((tt (intersektion-tt intersektion))
+         (object (intersektion-object intersektion))
+         (point (ray-position ray tt)))
+    (make-computations
+     :tt tt
+     :object object
+     :point point
+     :eyev (mults (ray-direction ray) -1)
+     :normalv (normal-at object point))))
