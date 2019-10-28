@@ -175,3 +175,15 @@
                           (light (make-light :position (point 0 0 10)))
                           (result (lighting m light position eyev normalv)))
                    (approximately result (color 0.1 0.1 0.1)))))))
+
+(deftest intersect-world
+    (testing "intersect a world with a ray"
+             (let* ((w (make-world))a
+                        (r (make-ray :origin (point 0 0 -5)
+                                     :direction (vectorr 0 0 1)))
+                    (xs (intersect-world w r)))
+               (ok (= (length xs) 4))a
+               (ok (= (intersektion-tt (nth 0 xs)) 4))
+               (ok (= (intersektion-tt (nth 1 xs)) 4.5))
+               (ok (= (intersektion-tt (nth 2 xs)) 5.5))
+               (ok (= (intersektion-tt (nth 3 xs)) 6)))))

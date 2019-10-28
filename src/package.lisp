@@ -7,6 +7,7 @@
      #:draw
      #:hit
      #:intersect
+     #:intersect-world
      #:intersektion-object
      #:intersektion-tt
      #:inverse
@@ -18,6 +19,7 @@
      #:make-material
      #:make-ray
      #:make-sphere
+     #:make-world
      #:material-ambient
      #:material-colour
      #:material-diffuse
@@ -36,11 +38,14 @@
      #:rotation-z
      #:scaling
      #:shearing
-     #:sphere-material 
+     #:sphere-material
      #:sphere-transform
      #:submatrix
      #:transform
      #:translation
      #:vectorr
+     #:world
+     #:world-light
+     #:world-shapes
      )
   (:use #:cl))

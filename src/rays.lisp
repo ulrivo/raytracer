@@ -23,6 +23,20 @@
   (specular 0.9)
   (shininess 200))
 
+(defstruct world
+  (light (make-light
+          :position (point -10 10 -10)
+          :intensity (color 1 1 1)))
+  (shapes (list
+           (make-sphere
+            :material (make-material
+                       :colour (color 0.8 1.0 0.6)
+                       :diffuse 0.7
+                       :specular 0.2))
+           (make-sphere
+            :material (make-material)
+            :transform (scaling 0.5 0.5 0.5)))))
+
 (defun ray-position (ray s)
   (tadd (ray-origin ray) (mults (ray-direction ray) s)))
 
@@ -92,3 +106,10 @@
             ;; (format t "reflect-dot-eye ~A specular ~A~%" reflect-dot-eye specular)
             ))))
     (tadd ambient (tadd diffuse specular))))
+
+(defun intersect-world (world ray)
+  (sort
+        (mapcan
+         (lambda (s) (intersect s ray))
+         (world-shapes world))
+        #'< :key #'intersektion-tt))
