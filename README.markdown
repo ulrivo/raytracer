@@ -39,6 +39,8 @@ and run tests with
 (rove:run :raytracer/tests)
 
 
+## Test
+(asdf:operate 'asdf:test-op :raytracer)
 ## Usage
 ### Debugging
 

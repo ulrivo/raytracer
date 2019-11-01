@@ -1,4 +1,4 @@
-(defsystem "raytracer"
+(Specify license heredefsystem "raytracer"
   :version "0.1.0"
   :author "Ulrich Vollert <lisp@ulrivo.de>"
   :license ""
