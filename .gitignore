@@ -1,4 +1,5 @@
 .DS_STORE
+*.png
 *.ppm
 *.fasl
 *.dx32fsl

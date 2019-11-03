@@ -4,7 +4,7 @@
   (let* ((ray-origin (point 0 0 -5))
          (wall-z 10)
          (wall-size 7)
-         (canvas-pixel 250)
+         (canvas-pixel 500)
          (pixel-size (/ wall-size canvas-pixel))
          (half (/ wall-size 2))
          (canvas (canvas canvas-pixel canvas-pixel))
@@ -28,5 +28,4 @@
                        (eye (mults (ray-direction r) -1)))
                   (write-pixel canvas x y
                                (lighting material light point eye normal)))))))))
-    (save-canvas canvas "sphere7.ppm")))
-
+    (save-canvas canvas "sphere500.png")))

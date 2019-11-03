@@ -117,28 +117,46 @@
                 (no-longer (subseq string (1+ pos)))))
       string))
 
-(defun canvas-to-ppm (canvas)
+;; (defun canvas-to-ppm (canvas)
+;;   (let* ((dimension (array-dimensions canvas))
+;;          (w (first dimension))
+;;          (h (second dimension))
+;;          (data (format nil "P3~%~A ~A~%255~%" w h)))
+;;     (flet ((concat (s)
+;;              (setf data
+;;                    (concatenate
+;;                     'string
+;;                     data s))))
+;;       (dotimes (j h)
+;;         (let ((line nil))
+;;           (dotimes (i w)
+;;             (let ((col (aref canvas i j)))
+;;               (dotimes (k 3)
+;;                 (push (min 255 (truncate (* 255 (elt col k)))) line))))
+;;           (concat (no-longer (format nil "~{~A ~}~%" (reverse line)))))))
+;;     data))
+
+;; (defun save-canvas (canvas filename)
+;;   "save a canvas to a file"
+;;   (with-open-file (str filename
+;;                        :direction :output
+;;                        :if-exists :supersede
+;;                        :if-does-not-exist :create)
+;;     (format str "~A" (canvas-to-ppm canvas))))
+
+(defun save-canvas (canvas filename)
+  "save a canvas to a file"
   (let* ((dimension (array-dimensions canvas))
          (w (first dimension))
          (h (second dimension))
-         (data (format nil "P3~%~A ~A~%255~%" w h)))
-    (flet ((concat (s)
-             (setf data
-                   (concatenate
-                    'string
-                    data s))))
-      (dotimes (j h)
-        (let ((line nil))
-          (dotimes (i w)
-            (let ((col (aref canvas i j)))
-              (dotimes (k 3)
-                (push (min 255 (truncate (* 255 (elt col k)))) line))))
-          (concat (no-longer (format nil "~{~A ~}~%" (reverse line)))))))
-    data))
-
-(defun save-canvas (canvas filename)
-  (with-open-file (str filename
-                       :direction :output
-                       :if-exists :supersede
-                       :if-does-not-exist :create)
-    (format str "~A" (canvas-to-ppm canvas))))
+         (new (png:make-image h w 3)))
+    (dotimes (j h)
+      (dotimes (i w)
+        (let ((col (aref canvas i j)))
+          (dotimes (k 3)
+            (setf (aref new j i k) (min 255 (truncate (* 255 (elt col k)))))))))
+    (with-open-file (output filename :element-type '(unsigned-byte 8)
+                                     :direction :output
+                                     :if-exists :supersede
+                                     :if-does-not-exist :create)
+      (png:encode new output))))

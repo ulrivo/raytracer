@@ -2,7 +2,7 @@
   :version "0.1.0"
   :author "Ulrich Vollert <lisp@ulrivo.de>"
   :license ""
-  :depends-on ()
+  :depends-on ("png")
   :components ((:module "src"
                 :components
                 ((:file "package")
