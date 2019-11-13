@@ -23,11 +23,14 @@
   (specular 0.9)
   (shininess 200))
 
-(defstruct world
-  (light (make-light
+(defstruct world light shapes)
+
+(defun default-world ()
+  (make-world
+  :light (make-light
           :position (point -10 10 -10)
-          :intensity (color 1 1 1)))
-  (shapes (list
+          :intensity (color 1 1 1))
+  :shapes (list
            (make-sphere
             :material (make-material
                        :colour (color 0.8 1.0 0.6)
@@ -38,7 +41,7 @@
             :transform (scaling 0.5 0.5 0.5)))))
 
 (defstruct computations
-  tt object point eyev normalv )
+  tt object point eyev normalv inside )
 
 (defun ray-position (ray s)
   (tadd (ray-origin ray) (mults (ray-direction ray) s)))
@@ -120,10 +123,22 @@
 (defun prepare-computations (intersektion ray)
   (let* ((tt (intersektion-tt intersektion))
          (object (intersektion-object intersektion))
-         (point (ray-position ray tt)))
+         (point (ray-position ray tt))
+         (eyev (mults (ray-direction ray) -1))
+         (normalv (normal-at object point))
+         (inside (dot normalv eyev)))
+    (when inside (setf normalv (mults normalv -1)))
     (make-computations
      :tt tt
      :object object
      :point point
-     :eyev (mults (ray-direction ray) -1)
-     :normalv (normal-at object point))))
+     :eyev eyev
+     :normalv normalv
+     :inside inside)))
+
+(defun all-function-symbols (package)
+  "Retrieves all functions in a package."
+  (let (symbols)
+    (do-symbols (s package)
+      (push s symbols))
+    symbols))

@@ -178,26 +178,27 @@
 
 (deftest intersect-world
     (testing "intersect a world with a ray"
-             (let* ((w (make-world))a
+             (let* ((w (default-world))
                         (r (make-ray :origin (point 0 0 -5)
                                      :direction (vectorr 0 0 1)))
                     (xs (intersect-world w r)))
-               (ok (= (length xs) 4))a
+               (ok (= (length xs) 4))
                (ok (= (intersektion-tt (nth 0 xs)) 4))
                (ok (= (intersektion-tt (nth 1 xs)) 4.5))
                (ok (= (intersektion-tt (nth 2 xs)) 5.5))
                (ok (= (intersektion-tt (nth 3 xs)) 6)))))
  
 (deftest prep-comps
-    (testing "prepare computations"
-     (ok (let* ((r (make-ray
-                   :origin (point 0 0 -5)
-                   :direction (vectorr 0 0 1)))
-                (shape (make-sphere))
-                (i (make-intersektion :tt 4 :object shape))
-                (comps (prepare-computations i r)))
-           (and (eql (computations-tt comps) (intersektion-tt i))
-                (equalp (computations-object comps) (intersektion-object i))
-                (equalp (computations-point comps) (point 0 0 -1))
-                (equalp (computations-eyev comps) (vectorr 0 0 -1))
-                (equalp (computations-normalv comps) (vectorr 0 0 -1)))))))
+  (testing "prepare computations"
+    (let* ((r (make-ray
+               :origin (point 0 0 0)
+               :direction (vectorr 0 0 1)))
+           (shape (make-sphere))
+           (i (make-intersektion :tt 1 :object shape))
+           (comps (prepare-computations i r)))
+      (ok (eql (computations-tt comps) (intersektion-tt i)))
+      (ok     (equalp (computations-object comps) (intersektion-object i)))
+      (ok     (equalp (computations-point comps) (point 0 0 1)))
+      (ok    (computations-inside comps))
+      (ok (equalp (computations-eyev comps) (vectorr 0 0 -1)))
+      (ok  (equalp (computations-normalv comps) (vectorr 0 0 -1))))))

@@ -3,12 +3,13 @@
      #:approximately
      #:cofactor
      #:color
-     #:computations
-     #:computations-tt
+     #:computations-eyev
+     #:computations-inside
+     #:computations-normalv
      #:computations-object
      #:computations-point
-     #:computations-eyev
-     #:computations-normalv
+     #:computations-tt
+     #:default-world
      #:determinant
      #:draw
      #:hit
@@ -20,7 +21,6 @@
      #:light-intensity
      #:light-position
      #:lighting
-     #:make-computations
      #:make-intersektion
      #:make-light
      #:make-material
@@ -46,14 +46,11 @@
      #:rotation-z
      #:scaling
      #:shearing
-     #:sphere-material
+     #:sphere-material 
      #:sphere-transform
      #:submatrix
      #:transform
      #:translation
      #:vectorr
-     #:world
-     #:world-light
-     #:world-shapes
      )
   (:use #:cl))
