@@ -3,6 +3,7 @@
      #:approximately
      #:cofactor
      #:color
+     #:color-at
      #:computations-eyev
      #:computations-inside
      #:computations-normalv

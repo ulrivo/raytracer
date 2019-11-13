@@ -236,3 +236,30 @@
                              :position (point 0 0.25 0)
                              :intensity (color 1 1 1)))
       (ok (approximately (shade-hit w comps) (color 0.90498 0.90498 0.90498))))))
+
+(deftest color-at
+  (testing "the color when a ray misses"
+    (ok (let ((w (default-world))
+              (r (make-ray :origin (point 0 0 -5)
+                           :direction (vectorr 0 1 0))))
+          (equalp (color-at w r) (color 0 0 0))))))
+
+(deftest color-at-hit
+  (testing "the color when a ray hits"
+    (ok (let ((w (default-world))
+              (r (make-ray :origin (point 0 0 -5)
+                           :direction (vectorr 0 0 1))))
+          (approximately (color-at w r)
+                         (color 0.38066 0.47583 0.2855))))))
+
+(deftest color-at-behind
+  (testing "the color with an intersection behind the ray"
+    (ok (let* ((w (default-world))
+               (outer (first (world-shapes w)))
+               (inner (second (world-shapes w)))
+              (r (make-ray :origin (point 0 0 0.75)
+                           :direction (vectorr 0 0 -1))))
+          (setf (material-ambient (sphere-material outer)) 1)
+          (setf (material-ambient (sphere-material inner)) 1)
+          (approximately (color-at w r)
+                         (material-colour (sphere-material inner)))))))

@@ -142,3 +142,9 @@
             (computations-point comps)
             (computations-eyev comps)
             (computations-normalv comps)))
+
+(defun color-at (world ray)
+  (let ((h (hit (intersect-world world ray))))
+    (if h
+        (shade-hit world (prepare-computations h ray))
+        (color 0 0 0))))
