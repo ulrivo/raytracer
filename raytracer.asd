@@ -9,6 +9,7 @@
                  (:file "tuples")
                  (:file "matrices")
                  (:file "rays")
+                 (:file "views")
                  (:file "main"))))
   :description "Raytracer by Jamis Buck"
   :in-order-to ((test-op (test-op "raytracer/tests"))))
@@ -23,6 +24,7 @@
                 ((:file "package")
                  (:file "matrices")
                  (:file "rays")
+                 (:file "views")
                  (:file "main"))))
   :description "Test system for raytracer"
   :perform (test-op (op c) (symbol-call :rove :run c)))

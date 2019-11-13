@@ -10,10 +10,11 @@
      #:computations-object
      #:computations-point
      #:computations-tt
-     #:default-world bb
+     #:default-world 
      #:determinant
      #:draw
      #:hit
+     #:*identity-matrix*
      #:intersect
      #:intersect-world
      #:intersektion-object
@@ -54,6 +55,7 @@
      #:transform
      #:translation
      #:vectorr
+     #:view-transform
      #:world-light
      #:world-shapes
      )
