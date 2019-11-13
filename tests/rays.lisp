@@ -187,8 +187,16 @@
                (ok (= (intersektion-tt (nth 1 xs)) 4.5))
                (ok (= (intersektion-tt (nth 2 xs)) 5.5))
                (ok (= (intersektion-tt (nth 3 xs)) 6)))))
- 
+
 (deftest prep-comps
+  (testing "the hit, when an intersection occurs on the outside"
+    (ng
+     (let* ((r (make-ray :origin (point 0 0 -5) :direction (vectorr 0 0 1)))
+            (shape (make-sphere))
+            (i (make-intersektion :tt 4 :object shape)))
+       (computations-inside (prepare-computations i r))))))
+
+(deftest prep-comps-inside
   (testing "prepare computations"
     (let* ((r (make-ray
                :origin (point 0 0 0)
@@ -202,3 +210,29 @@
       (ok    (computations-inside comps))
       (ok (equalp (computations-eyev comps) (vectorr 0 0 -1)))
       (ok  (equalp (computations-normalv comps) (vectorr 0 0 -1))))))
+
+(deftest shade-hit
+  (testing "shading an intersection"
+    (let* ((w (default-world))
+           (r (make-ray
+               :origin (point 0 0 -5)
+               :direction (vectorr 0 0 1)))
+           (shape (first (world-shapes w)))
+           (i (make-intersektion :tt 4 :object shape))
+           (comps (prepare-computations i r))
+           (c (shade-hit w comps)))
+      (ok (approximately c (color 0.38066 0.47583 0.2855))))))
+
+(deftest shade-hit-inside
+  (testing "shading an intersection from the inside"
+    (let* ((w (default-world))
+           (r (make-ray
+               :origin (point 0 0 0)
+               :direction (vectorr 0 0 1)))
+           (shape (second (world-shapes w)))
+           (i (make-intersektion :tt 0.5 :object shape))
+           (comps (prepare-computations i r)))
+      (setf (world-light w) (make-light
+                             :position (point 0 0.25 0)
+                             :intensity (color 1 1 1)))
+      (ok (approximately (shade-hit w comps) (color 0.90498 0.90498 0.90498))))))

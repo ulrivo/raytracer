@@ -126,7 +126,7 @@
          (point (ray-position ray tt))
          (eyev (mults (ray-direction ray) -1))
          (normalv (normal-at object point))
-         (inside (dot normalv eyev)))
+         (inside (< (dot normalv eyev) 0)))
     (when inside (setf normalv (mults normalv -1)))
     (make-computations
      :tt tt
@@ -136,9 +136,9 @@
      :normalv normalv
      :inside inside)))
 
-(defun all-function-symbols (package)
-  "Retrieves all functions in a package."
-  (let (symbols)
-    (do-symbols (s package)
-      (push s symbols))
-    symbols))
+(defun shade-hit (world comps)
+  (lighting (sphere-material (computations-object comps))
+            (world-light world)
+            (computations-point comps)
+            (computations-eyev comps)
+            (computations-normalv comps)))

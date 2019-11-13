@@ -9,7 +9,7 @@
      #:computations-object
      #:computations-point
      #:computations-tt
-     #:default-world
+     #:default-world bb
      #:determinant
      #:draw
      #:hit
@@ -45,6 +45,7 @@
      #:rotation-y
      #:rotation-z
      #:scaling
+     #:shade-hit
      #:shearing
      #:sphere-material 
      #:sphere-transform
@@ -52,5 +53,7 @@
      #:transform
      #:translation
      #:vectorr
+     #:world-light
+     #:world-shapes
      )
   (:use #:cl))
