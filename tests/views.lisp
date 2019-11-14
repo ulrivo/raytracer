@@ -76,3 +76,14 @@
                       (view-transform from to up))))
           (approximately (pixel-at (render c w) 5 5)
                          (color 0.38066 0.47583 0.2855))))))
+
+(deftest is-shadowed
+    (let ((w (default-world)))
+      (testing "there is no shadow when nothing is collinear with point and light"
+               (ng (is-shadowed w (point 0 10 0))))
+      (testing "The shadow when an object is between the point and the light"
+               (ok (is-shadowed w (point 10 -10 10))))
+      (testing "there is no shadow when an object is behind the light"
+               (ng (is-shadowed w (point -20 20 -20))))
+      (testing "there is no shadow when an object is behind the point"
+               (ng (is-shadowed w (point -2 2 -2))))))

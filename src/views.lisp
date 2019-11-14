@@ -69,3 +69,12 @@
                 (color (color-at world ray)))
           (write-pixel image x y color))))
     image))
+
+(defun is-shadowed (world point)
+  (let* ((v (tsub (light-position (world-light world)) point))
+         (distance (magnitude v))
+         (direction (normalize v))
+         (r (make-ray :origin point :direction direction))
+         (is (intersect-world world r))
+         (h (hit is)))
+    (and h (< (intersektion-tt h) distance))))

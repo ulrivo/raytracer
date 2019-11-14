@@ -2,7 +2,7 @@
   (:export
      #:approx
      #:approximately
-     #:camera-pixel-size 
+     #:camera-pixel-size
      #:camera-transform
      #:cofactor
      #:color
@@ -14,7 +14,7 @@
      #:computations-point
      #:computations-tt
      #:create-camera
-     #:default-world 
+     #:default-world
      #:determinant
      #:draw
      #:hit
@@ -24,6 +24,7 @@
      #:intersektion-object
      #:intersektion-tt
      #:inverse
+     #:is-shadowed
      #:light-intensity
      #:light-position
      #:lighting
