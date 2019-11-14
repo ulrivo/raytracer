@@ -41,6 +41,7 @@
      #:minor
      #:mm
      #:normal-at
+     #:pixel-at
      #:point
      #:prepare-computations
      #:ray-direction
@@ -48,6 +49,7 @@
      #:ray-origin
      #:ray-position
      #:reflect
+     #:render
      #:rotation-x
      #:rotation-y
      #:rotation-z

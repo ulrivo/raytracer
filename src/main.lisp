@@ -1,31 +1,52 @@
 (in-package :raytracer)
 
 (defun draw ()
-  (let* ((ray-origin (point 0 0 -5))
-         (wall-z 10)
-         (wall-size 7)
-         (canvas-pixel 500)
-         (pixel-size (/ wall-size canvas-pixel))
-         (half (/ wall-size 2))
-         (canvas (canvas canvas-pixel canvas-pixel))
-         ;; (deform (mm (rotation-z 1.2) (scaling 0.2 1 1.0)))
-         (shape (make-sphere ))
-         (material (make-material :colour +blue+))
-         (light (make-light :position (point -10 10 -10) :intensity (color 1 1 1))))
-    (dotimes (y canvas-pixel)
-      (let ((world-y (- half (* pixel-size y))))
-        (dotimes (x canvas-pixel)
-          (let* ((world-x (+ (- half) (* pixel-size x)))
-                 (position (point world-x world-y wall-z))
-                 (r (make-ray
-                     :origin ray-origin
-                     :direction (normalize (tsub position ray-origin))))
-                 (xs (intersect shape r)))
-            (let ((h (hit xs)))
-              (when h
-                (let* ((point (ray-position r (intersektion-tt h)))
-                       (normal (normal-at (intersektion-object h) point))
-                       (eye (mults (ray-direction r) -1)))
-                  (write-pixel canvas x y
-                               (lighting material light point eye normal)))))))))
+  (let* ((floor (make-sphere
+                 :transform (scaling 10 0.01 10)
+                 :material (make-material
+                            :colour (color 1 0.9 0.9)
+                            :specular 0)))
+         (left-wall (make-sphere
+                     :transform (mm (translation 0 0 5)
+                                (mm (rotation-y (- (/ pi 4)))
+                                (mm (rotation-x (/ pi 2))
+                                     (scaling 10 0.01 10))))
+                     :material (sphere-material floor)))
+         (right-wall (make-sphere
+                      :transform (mm (translation 0 0 5)
+                                     (mm (rotation-y (/ pi 4))
+                                         (mm (rotation-x (/ pi 2))
+                                             (scaling 10 0.01 10))))
+                      :material (sphere-material floor)))
+         (middle (make-sphere
+                  :transform (translation -0.5 1 0.5)
+                  :material (make-material
+                             :colour (color 0.1 1 0.5)
+                             :diffuse 0.7
+                             :specular 0.3)))
+         (right (make-sphere
+                 :transform (mm (translation 1.5 1 -0.5)
+                                (scaling 0.5 0.5 0.5))
+                 :material (make-material
+                            :colour (color 0.5 1 0.1)
+                            :diffuse 0.7
+                            :specular 0.3)))
+         (left (make-sphere
+                 :transform (mm (translation -1.5 0.33 -0.75)
+                                (scaling 0.33 0.33 0.33))
+                     :material (make-material
+                                :colour (color 1 0.8 0.1)
+                                :diffuse 0.7
+                                :specular 0.3)))
+         (camera (create-camera 500 250 (/ pi 3)
+                                (view-transform (point 0 1.5 -5)
+                                                (point 0 1 0)
+                                                (vectorr 0 1 0))))
+         (world (make-world
+                 :light (make-light
+                         :position (point -10 10 -10)
+                         :intensity (color 1 1 1))
+                 :shapes (list floor left-wall right-wall
+                          middle right left )))
+         (canvas (render camera world)))
     (save-canvas canvas "sphere500.png")))

@@ -104,6 +104,9 @@
     (and (<= 0 xi) (< xi w) (<= 0 yi) (< yi h)
          (setf (aref canvas xi yi) color))))
 
+(defun pixel-at (canvas x y)
+  (aref canvas x y))
+
 ;; given a string, if it is longer than 70 characters,
 ;; find the last space before 70 character and replace it with a newline,
 ;; repeat this on rest

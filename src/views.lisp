@@ -29,7 +29,8 @@
   hsize vsize field-of-view transform
   pixel-size half-width half-height)
 
-(defun create-camera (hsize vsize field-of-view)
+(defun create-camera (hsize vsize field-of-view
+                      &optional (transform *identity-matrix*))
   (let* ((half-view (tan (/ field-of-view 2)))
          (aspect (/ hsize vsize))
          (half-width half-view)
@@ -43,7 +44,7 @@
      :hsize hsize
      :vsize vsize
      :field-of-view field-of-view
-     :transform *identity-matrix*
+     :transform transform
      :pixel-size pixel-size
      :half-width half-width
      :half-height half-height)))
@@ -59,3 +60,12 @@
                      (point 0 0 0)))
          (direction (normalize (tsub pixel origin))))
     (make-ray :origin origin :direction direction)))
+
+(defun render (camera world)
+  (let ((image (canvas (camera-hsize camera) (camera-vsize camera))))
+    (dotimes (y (camera-vsize camera))
+      (dotimes (x (camera-hsize camera))
+        (let*  ((ray (ray-for-pixel camera x y))
+                (color (color-at world ray)))
+          (write-pixel image x y color))))
+    image))

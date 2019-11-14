@@ -69,3 +69,13 @@
                            (vectorr (/ (sqrt 2) 2) 0
                                     (- (/ (sqrt 2) 2)))))))))
 
+(deftest render
+  (testing "rendering a world with a camera"
+    (ok (let* ((w (default-world))
+               (c (create-camera 11 11 (/ pi 2)))
+               (from (point 0 0 -5))
+               (to (point 0 0 0))
+               (up (vectorr 0 1 0)))
+          (setf (camera-transform c) (view-transform from to up))
+          (approximately (pixel-at (render c w) 5 5)
+                         (color 0.38066 0.47583 0.2855))))))
