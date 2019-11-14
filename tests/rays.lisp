@@ -194,9 +194,8 @@
      (let* ((r (make-ray :origin (point 0 0 -5) :direction (vectorr 0 0 1)))
             (shape (make-sphere))
             (i (make-intersektion :tt 4 :object shape)))
-       (computations-inside (prepare-computations i r))))))
+       (computations-inside (prepare-computations i r)))))
 
-(deftest prep-comps-inside
   (testing "prepare computations"
     (let* ((r (make-ray
                :origin (point 0 0 0)
@@ -221,9 +220,8 @@
            (i (make-intersektion :tt 4 :object shape))
            (comps (prepare-computations i r))
            (c (shade-hit w comps)))
-      (ok (approximately c (color 0.38066 0.47583 0.2855))))))
+      (ok (approximately c (color 0.38066 0.47583 0.2855)))))
 
-(deftest shade-hit-inside
   (testing "shading an intersection from the inside"
     (let* ((w (default-world))
            (r (make-ray
@@ -242,17 +240,15 @@
     (ok (let ((w (default-world))
               (r (make-ray :origin (point 0 0 -5)
                            :direction (vectorr 0 1 0))))
-          (equalp (color-at w r) (color 0 0 0))))))
+          (equalp (color-at w r) (color 0 0 0)))))
 
-(deftest color-at-hit
   (testing "the color when a ray hits"
     (ok (let ((w (default-world))
               (r (make-ray :origin (point 0 0 -5)
                            :direction (vectorr 0 0 1))))
           (approximately (color-at w r)
-                         (color 0.38066 0.47583 0.2855))))))
+                         (color 0.38066 0.47583 0.2855)))))
 
-(deftest color-at-behind
   (testing "the color with an intersection behind the ray"
     (ok (let* ((w (default-world))
                (outer (first (world-shapes w)))

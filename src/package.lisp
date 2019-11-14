@@ -1,6 +1,9 @@
 (defpackage #:raytracer
   (:export
+     #:approx
      #:approximately
+     #:camera-pixel-size 
+     #:camera-transform
      #:cofactor
      #:color
      #:color-at
@@ -10,6 +13,7 @@
      #:computations-object
      #:computations-point
      #:computations-tt
+     #:create-camera
      #:default-world 
      #:determinant
      #:draw
@@ -40,6 +44,7 @@
      #:point
      #:prepare-computations
      #:ray-direction
+     #:ray-for-pixel
      #:ray-origin
      #:ray-position
      #:reflect

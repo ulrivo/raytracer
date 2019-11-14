@@ -50,6 +50,9 @@
                                      (< (abs x) +epsilon+))
                              (tsub r s)) always element))))
 
+(defun approx (x y)
+  (< (abs (- x y)) +epsilon+))
+
 ;; scalar multiplication division
 
 (defun mults (v s)
