@@ -148,32 +148,32 @@
                (ok (let* ((eyev (vectorr 0 0 -1))
                           (normalv (vectorr 0 0 -1))
                           (light (make-light :position (point 0 0 -10)))
-                          (result (lighting m light position eyev normalv)))
+                          (result (lighting m light position eyev normalv nil)))
                      (equalp result (color 1.9 1.9 1.9)))))
       (testing "lighting with the eye between the light and the surface, eye offset 45 degree"
                (ok (let* ((eyev (vectorr 0 (/ (sqrt 2) 2) (- (/ (sqrt 2) 2))))
                           (normalv (vectorr 0 0 -1))
                           (light (make-light :position (point 0 0 -10)))
-                          (result (lighting m light position eyev normalv)))
+                          (result (lighting m light position eyev normalv nil)))
                      (equalp result (color 1 1 1)))))
       (testing "lighting with the eye opposite surface, eye offset 45 degree"
                (ok (let* ((eyev (vectorr 0 0 -1))
                           (normalv (vectorr 0 0 -1))
                           (light (make-light :position (point 0 10 -10)))
-                          (result (lighting m light position eyev normalv)))
+                          (result (lighting m light position eyev normalv nil)))
                      (approximately result (color 0.7364 0.7364 0.7364)))))
       (testing "lighting with the eye in the path of the reflection vector"
                (ok (let* ((sq2 (- (/ (sqrt 2) 2)))
                           (eyev (vectorr 0 sq2 sq2))
                           (normalv (vectorr 0 0 -1))
                           (light (make-light :position (point 0 10 -10)))
-                          (result (lighting m light position eyev normalv)))
+                          (result (lighting m light position eyev normalv nil)))
                      (approximately result (color 1.6363853 1.6363853 1.6363853)))))
       (testing "lighting with the eye behind the surface"
                (ok (let* ((eyev (vectorr 0 0 -1))
                           (normalv (vectorr 0 0 -1))
                           (light (make-light :position (point 0 0 10)))
-                          (result (lighting m light position eyev normalv)))
+                          (result (lighting m light position eyev normalv nil)))
                    (approximately result (color 0.1 0.1 0.1)))))))
 
 (deftest intersect-world
@@ -259,3 +259,15 @@
           (setf (material-ambient (sphere-material inner)) 1)
           (approximately (color-at w r)
                          (material-colour (sphere-material inner)))))))
+
+(deftest lighting-in-shadow
+    (testing "lighting with the surface in shadow"
+      (ok (let ((m (make-material))
+                (eyev (vectorr 0 0 -1))
+                (normalv (vectorr 0 0 -1))
+                (light (make-light :position (point 0 0 -10)
+                                  :intensity (color 1 1 1)))
+                (in-shadow t))
+            (equalp (color 0.1 0.1 0.1)
+                    (lighting m light (point 0 0 0)
+                              eyev normalv in-shadow))))))

@@ -88,30 +88,31 @@
 (defun reflect (in normal)
   (tsub in (mults normal (* 2 (dot in normal)))))
 
-(defun lighting (material light point eyev normalv)
+(defun lighting (material light point eyev normalv in-shadow)
   (let* ((effective-color (hadamard-product (material-colour material)
                                             (light-intensity light)))
          (lightv (normalize (tsub (light-position light)
                                   point)))
-         (ambient (mults effective-color (material-ambient material)))
-         (diffuse (color 0 0 0))
-         (specular (color 0 0 0))
-         (light-dot-normal (dot lightv normalv)))
-    (when (<=  0 light-dot-normal)
-      (setf diffuse (mults effective-color
-                           (* (material-diffuse material)
-                              light-dot-normal)))
-      (let* ((reflectv (reflect (mults lightv -1) normalv))
-             (reflect-dot-eye (dot reflectv eyev)))
-        (when (> reflect-dot-eye 0)
-          (let ((factor (expt reflect-dot-eye (material-shininess material))))
-            (setf specular (mults
-                            (light-intensity light)
-                            (* (material-specular material)
-                               factor)))
-            ;; (format t "reflect-dot-eye ~A specular ~A~%" reflect-dot-eye specular)
-            ))))
-    (tadd ambient (tadd diffuse specular))))
+         (ambient (mults effective-color (material-ambient material))))
+    (if in-shadow
+        ambient
+        (progn
+          (let* ((diffuse (color 0 0 0))
+                 (specular (color 0 0 0))
+                 (light-dot-normal (dot lightv normalv)))
+            (when (<=  0 light-dot-normal)
+              (setf diffuse (mults effective-color
+                                   (* (material-diffuse material)
+                                      light-dot-normal)))
+              (let* ((reflectv (reflect (mults lightv -1) normalv))
+                     (reflect-dot-eye (dot reflectv eyev)))
+                (when (> reflect-dot-eye 0)
+                  (let ((factor (expt reflect-dot-eye (material-shininess material))))
+                    (setf specular (mults
+                                    (light-intensity light)
+                                    (* (material-specular material)
+                                       factor)))))))
+            (tadd ambient (tadd diffuse specular)))))))
 
 (defun intersect-world (world ray)
   (sort
@@ -141,7 +142,8 @@
             (world-light world)
             (computations-point comps)
             (computations-eyev comps)
-            (computations-normalv comps)))
+            (computations-normalv comps)
+            nil))
 
 (defun color-at (world ray)
   (let ((h (hit (intersect-world world ray))))

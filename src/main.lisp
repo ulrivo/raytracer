@@ -38,7 +38,7 @@
                                 :colour (color 1 0.8 0.1)
                                 :diffuse 0.7
                                 :specular 0.3)))
-         (camera (create-camera 500 250 (/ pi 3)
+         (camera (create-camera  300 150 (/ pi 3)
                                 (view-transform (point 0 1.5 -5)
                                                 (point 0 1 0)
                                                 (vectorr 0 1 0))))
