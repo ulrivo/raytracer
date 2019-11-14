@@ -59,23 +59,20 @@
                          (vectorr 0.66519 0.33259 -0.66851)))))
 
   (testing "a ray when the camera is transformed"
-    (let ((c (create-camera 201 101 (/ pi 2))))
-      (setf (camera-transform c)
-            (mm (rotation-y (/ pi 4))
-                (translation 0 -2 5)))
-      (let ((r (ray-for-pixel c 100 50)))
-        (ok (equalp (ray-origin r) (point 0 2 -5)))
-        (ok (approximately (ray-direction r)
-                           (vectorr (/ (sqrt 2) 2) 0
-                                    (- (/ (sqrt 2) 2)))))))))
+    (let* ((c (create-camera 201 101 (/ pi 2)
+              (mm (rotation-y (/ pi 4)) (translation 0 -2 5))))
+          (r (ray-for-pixel c 100 50)))
+      (ok (equalp (ray-origin r) (point 0 2 -5)))
+      (ok (approximately (ray-direction r)
+            (vectorr (/ (sqrt 2) 2) 0 (- (/ (sqrt 2) 2))))))))
 
 (deftest render
   (testing "rendering a world with a camera"
     (ok (let* ((w (default-world))
-               (c (create-camera 11 11 (/ pi 2)))
                (from (point 0 0 -5))
                (to (point 0 0 0))
-               (up (vectorr 0 1 0)))
-          (setf (camera-transform c) (view-transform from to up))
+               (up (vectorr 0 1 0))
+               (c (create-camera 11 11 (/ pi 2)
+                      (view-transform from to up))))
           (approximately (pixel-at (render c w) 5 5)
                          (color 0.38066 0.47583 0.2855))))))
