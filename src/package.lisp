@@ -11,12 +11,14 @@
      #:computations-inside
      #:computations-normalv
      #:computations-object
+     #:computations-over-point f
      #:computations-point
      #:computations-tt
      #:create-camera
      #:default-world
      #:determinant
      #:draw
+     #:+epsilon+
      #:hit
      #:*identity-matrix*
      #:intersect
@@ -31,7 +33,7 @@
      #:make-intersektion
      #:make-light
      #:make-material
-     #:make-ray
+     #:make-ray 
      #:make-sphere
      #:make-world
      #:material-ambient

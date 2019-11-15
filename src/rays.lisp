@@ -4,10 +4,6 @@
   (origin (point 0 0 0))
   (direction (vectorr 0 0 1)))
 
-(defstruct sphere
-  (transform *identity-matrix*)
-  material)
-
 (defstruct intersektion
   (tt 0)
   (object (make-sphere)))
@@ -22,6 +18,10 @@
   (diffuse 0.9)
   (specular 0.9)
   (shininess 200))
+
+(defstruct sphere
+  (transform *identity-matrix*)
+  (material (make-material)))
 
 (defstruct world light shapes)
 
@@ -41,7 +41,7 @@
             :transform (scaling 0.5 0.5 0.5)))))
 
 (defstruct computations
-  tt object point eyev normalv inside )
+  tt object point over-point eyev normalv inside )
 
 (defun ray-position (ray s)
   (tadd (ray-origin ray) (mults (ray-direction ray) s)))
@@ -133,17 +133,28 @@
      :tt tt
      :object object
      :point point
+     :over-point (tadd point (mults normalv +epsilon+))
      :eyev eyev
      :normalv normalv
      :inside inside)))
 
+(defun is-shadowed (world point)
+  (let* ((v (tsub (light-position (world-light world)) point))
+         (distance (magnitude v))
+         (direction (normalize v))
+         (r (make-ray :origin point :direction direction))
+         (is (intersect-world world r))
+         (h (hit is)))
+    (and h (< (intersektion-tt h) distance))))
+
 (defun shade-hit (world comps)
-  (lighting (sphere-material (computations-object comps))
-            (world-light world)
-            (computations-point comps)
-            (computations-eyev comps)
-            (computations-normalv comps)
-            nil))
+  (let ((shadowed (is-shadowed world (computations-over-point comps))))
+    (lighting (sphere-material (computations-object comps))
+              (world-light world)
+              (computations-point comps)
+              (computations-eyev comps)
+              (computations-normalv comps)
+              shadowed)))
 
 (defun color-at (world ray)
   (let ((h (hit (intersect-world world ray))))

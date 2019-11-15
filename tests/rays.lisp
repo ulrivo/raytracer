@@ -208,7 +208,19 @@
       (ok     (equalp (computations-point comps) (point 0 0 1)))
       (ok    (computations-inside comps))
       (ok (equalp (computations-eyev comps) (vectorr 0 0 -1)))
-      (ok  (equalp (computations-normalv comps) (vectorr 0 0 -1))))))
+      (ok  (equalp (computations-normalv comps) (vectorr 0 0 -1)))))
+
+  (testing "the hit should offset the point"
+    (let* ((r (make-ray :origin (point 0 0 -5)
+                        :direction (vectorr 0 0 1)))
+          (shape (make-sphere :transform (translation 0 0 1)))
+          (i (make-intersektion :tt 5 :object shape))
+           (comps (prepare-computations i r)))
+      (ok (< (aref (computations-over-point comps) 2)
+             (- (/ +epsilon+ 2))))
+      (ok (> (aref (computations-point comps) 2)
+             (aref (computations-over-point comps) 2))))))
+
 
 (deftest shade-hit
   (testing "shading an intersection"
@@ -233,7 +245,23 @@
       (setf (world-light w) (make-light
                              :position (point 0 0.25 0)
                              :intensity (color 1 1 1)))
-      (ok (approximately (shade-hit w comps) (color 0.90498 0.90498 0.90498))))))
+      (ok (approximately (shade-hit w comps) (color 0.90498 0.90498 0.90498)))))
+
+  (testing "shade_hit() is given an intersection in shadow"
+           (ok (let* ((s1 (make-sphere))
+                      (s2 (make-sphere :transform (translation 0 0 10)))
+                      (w (make-world
+                          :light (make-light
+                                  :position (point 0 0 -10)
+                                  :intensity (color 1 1 1))
+                          :shapes (list s1 s2)))
+                      (r (make-ray :origin (point 0 0 5)
+                                   :direction (vectorr 0 0 1)))
+                      (i (make-intersektion :tt 4
+                                            :object s2))
+                      (comps (prepare-computations i r)))
+                 (equalp (color 0.1 0.1 0.1)
+                         (shade-hit w comps))))))
 
 (deftest color-at
   (testing "the color when a ray misses"
