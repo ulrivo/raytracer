@@ -1,6 +1,6 @@
 (in-package :raytracer)
 
-(defun draw ()
+(defun draw (width height)
   (let* ((floor (make-sphere
                  :transform (scaling 10 0.01 10)
                  :material (make-material
@@ -38,7 +38,7 @@
                                 :colour (color 1 0.8 0.1)
                                 :diffuse 0.7
                                 :specular 0.3)))
-         (camera (create-camera  600 300 (/ pi 3)
+         (camera (create-camera  width height (/ pi 3)
                                 (view-transform (point 0 1.5 -5)
                                                 (point 0 1 0)
                                                 (vectorr 0 1 0))))

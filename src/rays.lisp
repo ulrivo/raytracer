@@ -1,48 +1,3 @@
-(in-package :raytracer)
-
-(defstruct ray
-  (origin (point 0 0 0))
-  (direction (vectorr 0 0 1)))
-
-(defstruct intersektion
-  (tt 0)
-  (object (make-sphere)))
-
-(defstruct light
-  (position (point 0 0 0))
-  (intensity (color 1 1 1)))
-
-(defstruct material
-  (colour (color 1 1 1))
-  (ambient 0.1)
-  (diffuse 0.9)
-  (specular 0.9)
-  (shininess 200))
-
-(defstruct sphere
-  (transform *identity-matrix*)
-  (material (make-material)))
-
-(defstruct world light shapes)
-
-(defun default-world ()
-  (make-world
-  :light (make-light
-          :position (point -10 10 -10)
-          :intensity (color 1 1 1))
-  :shapes (list
-           (make-sphere
-            :material (make-material
-                       :colour (color 0.8 1.0 0.6)
-                       :diffuse 0.7
-                       :specular 0.2))
-           (make-sphere
-            :material (make-material)
-            :transform (scaling 0.5 0.5 0.5)))))
-
-(defstruct computations
-  tt object point over-point eyev normalv inside )
-
 (defun ray-position (ray s)
   (tadd (ray-origin ray) (mults (ray-direction ray) s)))
 
@@ -51,7 +6,14 @@
    :origin (mm matrix (ray-origin ray))
    :direction (mm matrix (ray-direction ray))))
 
-;; answers an intersektion
+;; answers an intersektion, for all shapes first convert ray into object space
+(defmethod inter :before ((s shape) ray)
+  (inter )
+  (princ "before inter with ray " ))
+
+(defmethod inter ((s sphere) ray)
+  (princ "in inter for sphere with ray"))
+
 (defun intersect (sphere ray)
   (let* ((ray2 (transform ray (inverse (sphere-transform sphere))))
          (sphere-to-ray (tsub (ray-origin ray2) (point 0 0 0)))
