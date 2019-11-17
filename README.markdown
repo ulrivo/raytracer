@@ -42,6 +42,11 @@ and run tests with
 ## Test
 (asdf:operate 'asdf:test-op :raytracer)
 ## Usage
+
+(ql:quickload :raytracer)
+
+(load "main.lisp")
+
 ### Debugging
 
 Turn off optimiztions to see all steps in (step (function....)):
