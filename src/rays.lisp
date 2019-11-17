@@ -1,3 +1,5 @@
+(in-package :raytracer)
+
 (defun ray-position (ray s)
   (tadd (ray-origin ray) (mults (ray-direction ray) s)))
 

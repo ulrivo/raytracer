@@ -1,4 +1,5 @@
-(defpackage #:raytracer
+(defpackage raytracer
+  (:use #:cl)
   (:export
      #:approx
      #:approximately
@@ -11,7 +12,7 @@
      #:computations-inside
      #:computations-normalv
      #:computations-object
-     #:computations-over-point f
+     #:computations-over-point 
      #:computations-point
      #:computations-tt
      #:create-camera
@@ -71,4 +72,4 @@
      #:world-light
      #:world-shapes
      )
-  (:use #:cl))
+  )
