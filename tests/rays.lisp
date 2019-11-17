@@ -124,7 +124,7 @@
                    (approximately n (vectorr 0 0.70711 -0.70711)))))
   (testing "normal on a transformed sphere"
            (ok (let* ((m (mm (scaling 1 0.5 1) (rotation-z (/ pi 5))))
-                      (s (make-instance 'sphere :transform m))
+                      (s (make-sphere m (make-material)))
                       (n (normal-at s (point 0 (/ (sqrt 2) 2) (- (/ (sqrt 2) 2))))))
                  (approximately n (vectorr 0 0.97014 -0.24254))))))
 
@@ -213,7 +213,7 @@
   (testing "the hit should offset the point"
     (let* ((r (make-ray :origin (point 0 0 -5)
                         :direction (vectorr 0 0 1)))
-          (shape (make-instance 'sphere :transform (translation 0 0 1)))
+          (shape (make-sphere (translation 0 0 1) (make-material)))
           (i (make-intersektion :tt 5 :object shape))
            (comps (prepare-computations i r)))
       (ok (< (aref (computations-over-point comps) 2)
@@ -249,7 +249,7 @@
 
   (testing "shade_hit() is given an intersection in shadow"
            (ok (let* ((s1 (default-sphere))
-                      (s2 (make-instance 'sphere :transform (translation 0 0 10)))
+                      (s2 (make-sphere (translation 0 0 10) (make-material)))
                       (w (make-world
                           :light (make-light
                                   :position (point 0 0 -10)
