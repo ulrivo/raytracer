@@ -6,7 +6,7 @@
 
 (defstruct intersektion
   (tt 0)
-  (object (make-sphere)))
+  (object (default-sphere)))
 
 (defstruct light
   (position (point 0 0 0))
@@ -29,6 +29,14 @@
 
 (defclass sphere (shape) ())
 
+(defun default-sphere ()
+  (make-instance 'sphere))
+
+(defun make-sphere (transform material)
+  (make-instance 'sphere
+                 :transform transform
+                 :material material))
+
 (defstruct world light shapes)
 
 (defun default-world ()
@@ -37,12 +45,12 @@
            :position (point -10 10 -10)
            :intensity (color 1 1 1))
    :shapes (list
-            (make-sphere
+            (make-instance 'sphere
              :material (make-material
                         :colour (color 0.8 1.0 0.6)
                         :diffuse 0.7
                         :specular 0.2))
-            (make-sphere
+            (make-instance 'sphere
              :material (make-material)
              :transform (scaling 0.5 0.5 0.5)))))
 

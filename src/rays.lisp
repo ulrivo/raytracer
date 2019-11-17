@@ -7,15 +7,8 @@
    :direction (mm matrix (ray-direction ray))))
 
 ;; answers an intersektion, for all shapes first convert ray into object space
-(defmethod inter :before ((s shape) ray)
-  (inter )
-  (princ "before inter with ray " ))
-
-(defmethod inter ((s sphere) ray)
-  (princ "in inter for sphere with ray"))
-
 (defun intersect (sphere ray)
-  (let* ((ray2 (transform ray (inverse (sphere-transform sphere))))
+  (let* ((ray2 (transform ray (inverse (shape-transform sphere))))
          (sphere-to-ray (tsub (ray-origin ray2) (point 0 0 0)))
          (a (dot (ray-direction ray2) (ray-direction ray2)))
          (b (* 2 (dot (ray-direction ray2) sphere-to-ray)))
@@ -40,7 +33,7 @@
     mini))
 
 (defun normal-at (sphere world-point)
-  (let* ((inv (inverse (sphere-transform sphere)))
+  (let* ((inv (inverse (shape-transform sphere)))
          (object-point (mm inv world-point))
          (object-normal (tsub object-point (point 0 0 0)))
          (world-normal (mm (transpose inv) object-normal)))
@@ -111,7 +104,7 @@
 
 (defun shade-hit (world comps)
   (let ((shadowed (is-shadowed world (computations-over-point comps))))
-    (lighting (sphere-material (computations-object comps))
+    (lighting (shape-material (computations-object comps))
               (world-light world)
               (computations-point comps)
               (computations-eyev comps)

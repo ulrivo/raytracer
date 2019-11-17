@@ -9,7 +9,7 @@
          (half (/ wall-size 2))
          (canvas (canvas canvas-pixel canvas-pixel))
          ;; (deform (mm (rotation-z 1.2) (scaling 0.2 1 1.0)))
-         (shape (make-sphere ))
+         (shape (make-instance 'sphere ))
          (material (make-material :colour +blue+))
          (light (make-light :position (point -10 10 -10) :intensity (color 1 1 1))))
     (dotimes (y canvas-pixel)

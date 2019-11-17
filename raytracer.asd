@@ -8,6 +8,7 @@
                 ((:file "package")
                  (:file "tuples")
                  (:file "matrices")
+                 (:file "shapes")
                  (:file "rays")
                  (:file "views")
                  (:file "main"))))

@@ -21,36 +21,36 @@
 
 (deftest intersect
     (testing "intersection of sphere and ray"
-             (ok (let* ((r (make-ray :origin (point 0 0 -5) :direction (vectorr 0 0 1)))
-                        (s (make-sphere))
-                        (xs (intersect s r)))
-                   (and (= 2 (length xs))
-                        (= 4 (intersektion-tt (first xs)))
-                        (= 6 (intersektion-tt (second xs)))
-                        (equalp s (intersektion-object (first xs)))
-                        (equalp s (intersektion-object (second xs)))))))
+             (let* ((r (make-ray :origin (point 0 0 -5) :direction (vectorr 0 0 1)))
+                    (s (default-sphere))
+                    (xs (intersect s r)))
+               (ok (= 2 (length xs)))
+               (ok (= 4 (intersektion-tt (first xs))))
+               (ok (= 6 (intersektion-tt (second xs))))
+               (ok (eq s (intersektion-object (first xs))))
+               (ok (eq s (intersektion-object (second xs))))))
   (testing "ray misses sphere"
            (ok (let* ((r (make-ray :origin (point 0 2 -5) :direction (vectorr 0 0 1)))
-                      (s (make-sphere))
+                      (s (default-sphere))
                       (xs (intersect s r)))
                  (zerop (length xs)))))
   (testing "ray originates inside the sphere"
-           (ok (let* ((r (make-ray :origin (point 0 0 0) :direction (vectorr 0 0 1)))
-                      (s (make-sphere))
-                      (xs (intersect s r)))
-                 (and (= 2 (length xs))
-                      (= -1 (intersektion-tt (first xs)))
-                      (= 1 (intersektion-tt (second xs)))))))
+           (let* ((r (make-ray :origin (point 0 0 0) :direction (vectorr 0 0 1)))
+                       (s (default-sphere))
+                       (xs (intersect s r)))
+             (ok (= 2 (length xs)))
+             (ok (= -1 (intersektion-tt (first xs))))
+             (ok (= 1 (intersektion-tt (second xs))))))
   (testing "sphere is behind a ray"
-           (ok (let* ((r (make-ray :origin (point 0 0 5) :direction (vectorr 0 0 1)))
-                      (s (make-sphere))
-                      (xs (intersect s r)))
-                 (and (= 2 (length xs))
-                      (= -6 (intersektion-tt (first xs)))
-                      (= -4 (intersektion-tt (second xs))))))))
+           (let* ((r (make-ray :origin (point 0 0 5) :direction (vectorr 0 0 1)))
+                       (s (default-sphere))
+                       (xs (intersect s r)))
+             (ok (= 2 (length xs)))
+             (ok (= -6 (intersektion-tt (first xs))))
+             (ok (= -4 (intersektion-tt (second xs)))))))
 
 (deftest hits
-    (let ((s (make-sphere)))
+    (let ((s (default-sphere)))
       (testing "all intersections have positive tt"
                (ok (let* ((i1 (make-intersektion :tt 1 :object s))
                           (i2 (make-intersektion :tt 2 :object s))
@@ -94,15 +94,15 @@
 (deftest transform-sphere
     (let ((ray (make-ray :origin (point 0 0 -5) :direction (vectorr 0 0 1))))
       (testing "intersecting a scaled sphere with a ray"
-               (ok (let* ((s (make-sphere :transform (scaling 2 2 2)))
-                          (xs (intersect s ray)))
-                     (princ xs)
-                     (and (= 2 (length xs))
-                          (= 3 (intersektion-tt (first xs)))
-                          (= 7 (intersektion-tt (second xs)))))))))
+        (let* ((s (make-sphere (scaling 2 2 2) (make-material)))
+                    (xs (intersect s ray)))
+               (princ xs)
+          (ok (= 2 (length xs)))
+          (ok (= 3 (intersektion-tt (first xs))))
+          (ok (= 7 (intersektion-tt (second xs))))))))
 
 (deftest normal-on-sphere
-    (let ((s (make-sphere)))
+    (let ((s (default-sphere)))
       (testing "normal on sphere at a point on the x axis"
                (ok (let ((n (normal-at s (point 1 0 0))))
                      (equalp n (vectorr 1 0 0)))))
@@ -119,12 +119,12 @@
 
 (deftest normal-on-transformed-sphere
     (testing "normal on a translated sphere"
-             (ok (let* ((s (make-sphere :transform (translation 0 1 0)))
+             (ok (let* ((s (make-sphere (translation 0 1 0) (make-material)))
                         (n (normal-at s (point 0 1.70711 -0.70711))))
                    (approximately n (vectorr 0 0.70711 -0.70711)))))
   (testing "normal on a transformed sphere"
            (ok (let* ((m (mm (scaling 1 0.5 1) (rotation-z (/ pi 5))))
-                      (s (make-sphere :transform m))
+                      (s (make-instance 'sphere :transform m))
                       (n (normal-at s (point 0 (/ (sqrt 2) 2) (- (/ (sqrt 2) 2))))))
                  (approximately n (vectorr 0 0.97014 -0.24254))))))
 
@@ -192,7 +192,7 @@
   (testing "the hit, when an intersection occurs on the outside"
     (ng
      (let* ((r (make-ray :origin (point 0 0 -5) :direction (vectorr 0 0 1)))
-            (shape (make-sphere))
+            (shape (default-sphere))
             (i (make-intersektion :tt 4 :object shape)))
        (computations-inside (prepare-computations i r)))))
 
@@ -200,7 +200,7 @@
     (let* ((r (make-ray
                :origin (point 0 0 0)
                :direction (vectorr 0 0 1)))
-           (shape (make-sphere))
+           (shape (default-sphere))
            (i (make-intersektion :tt 1 :object shape))
            (comps (prepare-computations i r)))
       (ok (eql (computations-tt comps) (intersektion-tt i)))
@@ -213,7 +213,7 @@
   (testing "the hit should offset the point"
     (let* ((r (make-ray :origin (point 0 0 -5)
                         :direction (vectorr 0 0 1)))
-          (shape (make-sphere :transform (translation 0 0 1)))
+          (shape (make-instance 'sphere :transform (translation 0 0 1)))
           (i (make-intersektion :tt 5 :object shape))
            (comps (prepare-computations i r)))
       (ok (< (aref (computations-over-point comps) 2)
@@ -248,8 +248,8 @@
       (ok (approximately (shade-hit w comps) (color 0.90498 0.90498 0.90498)))))
 
   (testing "shade_hit() is given an intersection in shadow"
-           (ok (let* ((s1 (make-sphere))
-                      (s2 (make-sphere :transform (translation 0 0 10)))
+           (ok (let* ((s1 (default-sphere))
+                      (s2 (make-instance 'sphere :transform (translation 0 0 10)))
                       (w (make-world
                           :light (make-light
                                   :position (point 0 0 -10)
@@ -283,10 +283,10 @@
                (inner (second (world-shapes w)))
               (r (make-ray :origin (point 0 0 0.75)
                            :direction (vectorr 0 0 -1))))
-          (setf (material-ambient (sphere-material outer)) 1)
-          (setf (material-ambient (sphere-material inner)) 1)
+          (setf (material-ambient (shape-material outer)) 1)
+          (setf (material-ambient (shape-material inner)) 1)
           (approximately (color-at w r)
-                         (material-colour (sphere-material inner)))))))
+                         (material-colour (shape-material inner)))))))
 
 (deftest lighting-in-shadow
     (testing "lighting with the surface in shadow"

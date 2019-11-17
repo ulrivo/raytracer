@@ -1,37 +1,37 @@
 (in-package :raytracer)
 
 (defun draw (width height)
-  (let* ((floor (make-sphere
+  (let* ((floor (make-instance 'sphere
                  :transform (scaling 10 0.01 10)
                  :material (make-material
                             :colour (color 1 0.9 0.9)
                             :specular 0)))
-         (left-wall (make-sphere
+         (left-wall (make-instance 'sphere
                      :transform (mm (translation 0 0 5)
                                 (mm (rotation-y (- (/ pi 4)))
                                 (mm (rotation-x (/ pi 2))
                                      (scaling 10 0.01 10))))
-                     :material (sphere-material floor)))
-         (right-wall (make-sphere
+                     :material (shape-material floor)))
+         (right-wall (make-instance 'sphere
                       :transform (mm (translation 0 0 5)
                                      (mm (rotation-y (/ pi 4))
                                          (mm (rotation-x (/ pi 2))
                                              (scaling 10 0.01 10))))
-                      :material (sphere-material floor)))
-         (middle (make-sphere
+                      :material (shape-material floor)))
+         (middle (make-instance 'sphere
                   :transform (translation -0.5 1 0.5)
                   :material (make-material
                              :colour (color 0.1 1 0.5)
                              :diffuse 0.7
                              :specular 0.3)))
-         (right (make-sphere
+         (right (make-instance 'sphere
                  :transform (mm (translation 1.5 1 -0.5)
                                 (scaling 0.5 0.5 0.5))
                  :material (make-material
                             :colour (color 0.5 1 0.1)
                             :diffuse 0.7
                             :specular 0.3)))
-         (left (make-sphere
+         (left (make-instance 'sphere
                  :transform (mm (translation -1.5 0.33 -0.75)
                                 (scaling 0.33 0.33 0.33))
                      :material (make-material

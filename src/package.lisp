@@ -15,6 +15,7 @@
      #:computations-point
      #:computations-tt
      #:create-camera
+     #:default-sphere
      #:default-world
      #:determinant
      #:draw
@@ -33,7 +34,7 @@
      #:make-intersektion
      #:make-light
      #:make-material
-     #:make-ray 
+     #:make-ray
      #:make-sphere
      #:make-world
      #:material-ambient
@@ -59,8 +60,9 @@
      #:scaling
      #:shade-hit
      #:shearing
-     #:sphere-material 
-     #:sphere-transform
+     #:shape-material 
+     #:shape-transform
+     #:sphere
      #:submatrix
      #:transform
      #:translation
