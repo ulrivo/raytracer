@@ -10,8 +10,7 @@
                  (:file "matrices")
                  (:file "shapes")
                  (:file "rays")
-                 (:file "views")
-                 (:file "main"))))
+                 (:file "views"))))
   :description "Raytracer by Jamis Buck"
   :in-order-to ((test-op (test-op "raytracer/tests"))))
 

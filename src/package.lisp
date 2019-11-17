@@ -58,6 +58,7 @@
      #:rotation-x
      #:rotation-y
      #:rotation-z
+     #:save-canvas
      #:scaling
      #:shade-hit
      #:shearing

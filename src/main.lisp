@@ -1,4 +1,4 @@
-(in-package :raytracer)
+(use-package :raytracer)
 
 (defun draw (width height)
   (let* ((floor (make-sphere
