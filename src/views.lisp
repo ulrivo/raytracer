@@ -25,29 +25,6 @@
                                  (aref nfrom 2)))))
 
 
-(defstruct camera
-  hsize vsize field-of-view transform
-  pixel-size half-width half-height)
-
-(defun create-camera (hsize vsize field-of-view
-                      &optional (transform +identity-matrix+))
-  (let* ((half-view (tan (/ field-of-view 2)))
-         (aspect (/ hsize vsize))
-         (half-width half-view)
-         (half-height half-view)
-         (pixel-size))
-    (if (<= 1 aspect)
-        (setf half-height (/ half-view aspect))
-        (setf half-width  (* half-view aspect)))
-    (setf pixel-size (/ (* half-width 2) hsize))
-    (make-camera
-     :hsize hsize
-     :vsize vsize
-     :field-of-view field-of-view
-     :transform transform
-     :pixel-size pixel-size
-     :half-width half-width
-     :half-height half-height)))
 
 (defun ray-for-pixel (camera px py)
   (let* ((xoffset (* (camera-pixel-size camera) (+ px 0.5)))
@@ -69,4 +46,10 @@
                 (color (color-at world ray)))
           (write-pixel image x y color))))
     image))
+
+(defun stripe-pattern (col1 col2)
+  (lambda (point)
+    (if (evenp (floor (aref point 0)))
+        col1 col2)))
+
 

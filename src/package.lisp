@@ -1,6 +1,10 @@
 (defpackage raytracer
   (:use #:cl)
   (:export
+      #:+black+
+      #:+white+
+      #:+green+
+      #:+lime+
      #:approx
      #:approximately
      #:camera-pixel-size
@@ -43,6 +47,7 @@
      #:material-ambient
      #:material-colour
      #:material-diffuse
+     #:material-pattern 
      #:material-shininess
      #:material-specular
      #:minor
@@ -67,6 +72,7 @@
      #:shape-material 
      #:shape-transform
      #:sphere
+     #:stripe-pattern
      #:submatrix
      #:transform
      #:translation

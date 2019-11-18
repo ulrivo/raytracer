@@ -206,7 +206,23 @@
                           (normalv (vectorr 0 0 -1))
                           (light (make-light :position (point 0 0 10)))
                           (result (lighting m light position eyev normalv nil)))
-                   (approximately result (color 0.1 0.1 0.1)))))))
+                     (approximately result (color 0.1 0.1 0.1)))))))
+
+(deftest lighting-pattern
+    (testing "lighting with a pattern applied"
+             (let ((m (make-material
+                       :pattern (stripe-pattern +white+ +black+)
+                       :ambient 1
+                       :diffuse 0
+                       :specular 0))
+                   (eyev (vectorr 0 0 -1))
+                   (normalv (vectorr 0 0 -1))
+                   (light (make-light :position (point 0 0 -10)
+                                      :intensity (color 1 1 1))))
+               (ok (equalp (lighting m light (point 0.9 0 0) eyev normalv nil)
+                           +white+))
+               (ok (equalp (lighting m light (point 1.1 0 0) eyev normalv nil)
+                           +black+)))))
 
 (deftest intersect-world
     (testing "intersect a world with a ray"

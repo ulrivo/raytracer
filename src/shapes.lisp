@@ -17,7 +17,8 @@
   (ambient 0.1)
   (diffuse 0.9)
   (specular 0.9)
-  (shininess 200))
+  (shininess 200)
+  (pattern nil))   ;; function point -> color
 
 (defclass shape ()
   ((transform :accessor shape-transform
@@ -65,3 +66,27 @@
 
 (defstruct computations
   tt object point over-point eyev normalv inside )
+
+(defstruct camera
+  hsize vsize field-of-view transform
+  pixel-size half-width half-height)
+
+(defun create-camera (hsize vsize field-of-view
+                      &optional (transform +identity-matrix+))
+  (let* ((half-view (tan (/ field-of-view 2)))
+         (aspect (/ hsize vsize))
+         (half-width half-view)
+         (half-height half-view)
+         (pixel-size))
+    (if (<= 1 aspect)
+        (setf half-height (/ half-view aspect))
+        (setf half-width  (* half-view aspect)))
+    (setf pixel-size (/ (* half-width 2) hsize))
+    (make-camera
+     :hsize hsize
+     :vsize vsize
+     :field-of-view field-of-view
+     :transform transform
+     :pixel-size pixel-size
+     :half-width half-width
+     :half-height half-height)))
