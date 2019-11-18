@@ -22,18 +22,26 @@
 (defclass shape ()
   ((transform :accessor shape-transform
               :initarg :transform
-              :initform *identity-matrix*)
+              :initform +identity-matrix+)
    (material :accessor shape-material
              :initarg :material
              :initform (make-material))))
 
 (defclass sphere (shape) ())
 
-(defun default-sphere ()
-  (make-instance 'sphere))
+(defun default-sphere () (make-instance 'sphere))
 
 (defun make-sphere (transform material)
   (make-instance 'sphere
+                 :transform transform
+                 :material material))
+
+(defclass plane (shape) ())
+
+(defun default-plane () (make-instance 'plane))
+
+(defun make-plane (transform material)
+  (make-instance 'plane
                  :transform transform
                  :material material))
 
@@ -46,7 +54,7 @@
            :intensity (color 1 1 1))
    :shapes (list
             (make-sphere
-             *identity-matrix*
+             +identity-matrix+
              (make-material
               :colour (color 0.8 1.0 0.6)
               :diffuse 0.7

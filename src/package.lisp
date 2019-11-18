@@ -16,13 +16,14 @@
      #:computations-point
      #:computations-tt
      #:create-camera
+     #:default-plane
      #:default-sphere
      #:default-world
      #:determinant
      #:draw
      #:+epsilon+
      #:hit
-     #:*identity-matrix*
+     #:+identity-matrix+
      #:intersect
      #:intersect-world
      #:intersektion-object
@@ -35,6 +36,7 @@
      #:make-intersektion
      #:make-light
      #:make-material
+     #:make-plane
      #:make-ray
      #:make-sphere
      #:make-world

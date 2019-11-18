@@ -47,7 +47,29 @@
                        (xs (intersect s r)))
              (ok (= 2 (length xs)))
              (ok (= -6 (intersektion-tt (first xs))))
-             (ok (= -4 (intersektion-tt (second xs)))))))
+             (ok (= -4 (intersektion-tt (second xs))))))
+  (testing "Intersect with a ray parallel to the plane"
+           (let ((p (default-plane))
+                 (r (make-ray :origin (point 0 10 0) :direction (vectorr 0 0 1))))
+             (ng (intersect p r))))
+  (testing "Intersect with a coplanar ray"
+           (let ((p (default-plane))
+                 (r (make-ray :origin (point 0 0 0) :direction (vectorr 0 0 1))))
+             (ng (intersect p r))))
+  (testing "A ray intersecting a plane from above"
+           (let* ((p (default-plane))
+                 (r (make-ray :origin (point 0 1 0) :direction (vectorr 0 -1 0)))
+                 (xs (intersect p r)))
+             (ok (= 1 (length xs)))
+             (ok (= 1 (intersektion-tt (first xs))))
+             (ok (eq p (intersektion-object (first xs))))))
+  (testing "A ray intersecting a plane from below"
+           (let* ((p (default-plane))
+                 (r (make-ray :origin (point 0 -1 0) :direction (vectorr 0 1 0)))
+                 (xs (intersect p r)))
+             (ok (= 1 (length xs)))
+             (ok (= 1 (intersektion-tt (first xs))))
+             (ok (eq p (intersektion-object (first xs)))))))
 
 (deftest hits
     (let ((s (default-sphere)))
@@ -127,6 +149,16 @@
                       (s (make-sphere m (make-material)))
                       (n (normal-at s (point 0 (/ (sqrt 2) 2) (- (/ (sqrt 2) 2))))))
                  (approximately n (vectorr 0 0.97014 -0.24254))))))
+
+(deftest normal-on-plane
+    (testing "The normal of a plane is constant everywhere"
+             (let* ((p (default-plane))
+                    (n1 (normal-at p (point 0 0 0)))
+                    (n2 (normal-at p  (point 10 0 -10)))
+                    (n3 (normal-at p (point -5 0 150)))
+                    (ok (equalp n1 (vectorr 0 1 0)))
+                    (ok (equalp n2 (vectorr 0 1 0)))
+                    (ok (equalp n3 (vectorr 0 1 0)))))))
 
 (deftest reflection
     (testing "reflect a vector approaching at 45 degree"

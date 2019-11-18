@@ -1,23 +1,16 @@
 (use-package :raytracer)
 
 (defun draw (width height)
-  (let* ((floor (make-sphere
-                 (scaling 10 0.01 10)
+  (let* ((floor (make-plane
+                 +identity-matrix+
                  (make-material
-                  :colour (color 1 0.9 0.9)
+                  :colour (color 1 0.1 0.1)
                   :specular 0)))
-         (left-wall (make-sphere
-                     (mm (translation 0 0 5)
-                         (mm (rotation-y (- (/ pi 4)))
-                             (mm (rotation-x (/ pi 2))
-                                 (scaling 10 0.01 10))))
-                     (shape-material floor)))
-         (right-wall (make-sphere
-                      (mm (translation 0 0 5)
-                          (mm (rotation-y (/ pi 4))
-                              (mm (rotation-x (/ pi 2))
-                                  (scaling 10 0.01 10))))
-                      (shape-material floor)))
+         (back (make-plane
+                (mm (translation 0 0 5) (rotation-x (* (/ pi 2) 3)))
+                 (make-material
+                  :colour (color 0.1 0.1 1)
+                  :specular 0)))
          (middle (make-sphere
                   (translation -0.5 1 0.5)
                   (make-material
@@ -46,7 +39,6 @@
                  :light (make-light
                          :position (point -10 10 -10)
                          :intensity (color 1 1 1))
-                 :shapes (list floor left-wall right-wall
-                               middle right left )))
+                 :shapes (list floor back middle right left )))
          (canvas (render camera world)))
     (save-canvas canvas "sphere500.png")))

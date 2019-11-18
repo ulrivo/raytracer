@@ -27,7 +27,7 @@
               (setf (aref result i) s)))
           result))))
 
-(defparameter *identity-matrix*
+(defconstant +identity-matrix+
   (make-array '(4 4)
               :initial-contents
               '((1 0 0 0)

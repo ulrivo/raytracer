@@ -27,6 +27,13 @@
            (make-intersektion :tt t1 :object s)
            (make-intersektion :tt t2 :object s))))))
 
+(defmethod local-intersect ((p plane) ray)
+  (let ((y (aref (ray-direction ray) 1)))
+        (if (< (abs y) +epsilon+)
+            nil
+            (let ((tt (- (/ (aref (ray-origin ray) 1) y))))
+              (list (make-intersektion :tt tt :object p))))))
+
 ;; answer the intersection with the minimum of the non-negative tt-values
 (defun hit (intersektions)
   (let ((mini nil))
@@ -37,7 +44,8 @@
         (setf mini i)))
     mini))
 
-(defun normal-at (shape world-point)
+(defun normal-at (shape world-point) 
+  "wrapper for local-normal-at for all shapes"
   (let* ((inv (inverse (shape-transform shape)))
          (local-point (mm inv world-point))
          (local-normal (local-normal-at shape local-point))
@@ -48,6 +56,10 @@
 (defmethod local-normal-at ((s sphere) local-point)
   "the normal vector on a sphere at local-point"
   (tsub local-point (point 0 0 0)))
+
+(defmethod local-normal-at ((p plane) local-point)
+  "the normal vector on a plane is constant"
+  (vectorr 0 1 0))
 
 (defun reflect (in normal)
   (tsub in (mults normal (* 2 (dot in normal)))))

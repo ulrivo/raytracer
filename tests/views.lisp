@@ -6,7 +6,7 @@
                (to (point 0 0 -1))
                (up (vectorr 0 1 0)))
           (equalp (view-transform from to up)
-                  *identity-matrix*))))
+                  +identity-matrix+))))
 
   (testing "transformation matrix looking in positive z direction"
     (ok (let* ((from (point 0 0 0))
