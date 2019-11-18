@@ -6,6 +6,9 @@
 
 [cl-cookbook](https://lispcookbook.github.io/cl-cookbook/getting-started.html)
 
+(ql:quickload "cl-project")
+(cl-project:make-project #P"./path-to-project/root/")
+
 Additional explaination
 
 [Xach quick-project](https://xach.livejournal.com/278047.html)
