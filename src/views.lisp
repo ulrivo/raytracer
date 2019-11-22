@@ -47,9 +47,3 @@
           (write-pixel image x y color))))
     image))
 
-(defun stripe-pattern (col1 col2)
-  (lambda (point)
-    (if (evenp (floor (aref point 0)))
-        col1 col2)))
-
-

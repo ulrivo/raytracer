@@ -12,13 +12,34 @@
   (position (point 0 0 0))
   (intensity (color 1 1 1)))
 
+(defclass pattern ()
+  ((transform :accessor pattern-transform
+              :initarg :transform
+              :initform +identity-matrix+)
+   (color-func :accessor pattern-colour
+           :initarg :colour
+           :initform (lambda (x)(+black+)))))
+
+(defun make-pattern (color-func transform)
+  (make-instance 'pattern
+                 :transform transform
+                 :color-func color-func))
+
+(defun make-stripe-pattern (color1 color2 transform)
+  (make-instance 'pattern
+    :transform transform
+    :color-func
+          (lambda (point)
+            (if (evenp (floor (aref point 0)))
+                color1 color2))))
+
 (defstruct material
   (colour (color 1 1 1))
   (ambient 0.1)
   (diffuse 0.9)
   (specular 0.9)
   (shininess 200)
-  (pattern nil))   ;; function point -> color
+  (pattern nil))  
 
 (defclass shape ()
   ((transform :accessor shape-transform

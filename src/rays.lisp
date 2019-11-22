@@ -62,7 +62,10 @@
   (vectorr 0 1 0))
 
 (defun reflect (in normal)
-  (tsub in (mults normal (* 2 (dot in normal)))))
+  (tsub in (mults normal (* 2 (dot in normal))))) 
+
+(defun pattern-at-shape (pattern shape point))
+
 
 (defun lighting (material light point eyev normalv in-shadow)
   (let ((color (material-colour material)))
