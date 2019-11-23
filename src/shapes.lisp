@@ -23,10 +23,31 @@
            :initarg :color2
            :initform +white+)))
 
-(defclass stripe (pattern) ())
+(defclass stripe-pattern (pattern) ())
+(defclass gradient-pattern (pattern) ())
+(defclass ring-pattern (pattern) ())
+(defclass checkers-pattern (pattern) ())
 
-(defun make-stripe (color1 color2 transform)
-  (make-instance 'stripe
+(defun make-stripe-pattern (color1 color2 transform)
+  (make-instance 'stripe-pattern
+                 :color1 color1
+                 :color2 color2
+                 :transform transform))
+
+(defun make-gradient-pattern (color1 color2 transform)
+  (make-instance 'gradient-pattern
+                 :color1 color1
+                 :color2 color2
+                 :transform transform))
+
+(defun make-ring-pattern (color1 color2 transform)
+  (make-instance 'ring-pattern
+                 :color1 color1
+                 :color2 color2
+                 :transform transform))
+
+(defun make-checkers-pattern (color1 color2 transform)
+  (make-instance 'checkers-pattern
     :color1 color1
     :color2 color2
     :transform transform))

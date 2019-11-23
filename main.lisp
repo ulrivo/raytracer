@@ -6,19 +6,19 @@
                  (make-material
                   :colour (color 1 0.1 0.1)
                   :specular 0
-                  :pattern (make-stripe +lime+ +green+ +identity-matrix+))))
+                  :pattern (make-stripe-pattern +lime+ +green+ +identity-matrix+))))
          (back (make-plane
                 (mm (translation 0 0 5) (rotation-x (* (/ pi 2) 3)))
                  (make-material
                   :colour (color 0.1 0.1 1)
-                  :pattern (make-stripe +lime+ +green+ +identity-matrix+)
+                  :pattern (make-checkers-pattern +lime+ +green+ +identity-matrix+)
                   :specular 0)))
          (middle (make-sphere
                   (translation -0.5 1 0.5)
                   (make-material
                    :colour (color 0.1 1 0.5)
                    :diffuse 0.7
-                   :pattern (make-stripe +lime+ +green+ +identity-matrix+)
+                   :pattern (make-gradient-pattern +green+ +orange+ (rotation-y (/ pi 2)))
                    :specular 0.3)))
          (right (make-sphere
                  (mm (translation 1.5 1 -0.5)
@@ -26,7 +26,7 @@
                  (make-material
                   :colour (color 0.5 1 0.1)
                   :diffuse 0.7
-                  :pattern (make-stripe +lime+ +green+ +identity-matrix+)
+                  :pattern (make-ring-pattern +red+ +blue+ (scaling 0.1 0.1 0.1))
                   :specular 0.3)))
          (left (make-sphere
                 (mm (translation -1.5 0.33 -0.75)
@@ -34,7 +34,7 @@
                 (make-material
                  :colour (color 1 0.8 0.1)
                  :diffuse 0.7
-                 :pattern (make-stripe +lime+ +green+ +identity-matrix+)
+                 :pattern (make-stripe-pattern +lime+ +green+ +identity-matrix+)
                  :specular 0.3)))
          (camera (create-camera  width height (/ pi 3)
                                  (view-transform (point 0 1.5 -5)

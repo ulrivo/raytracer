@@ -64,19 +64,39 @@
 (defun reflect (in normal)
   (tsub in (mults normal (* 2 (dot in normal))))) 
 
-(defmethod stripe-at ((pattern stripe) point)
+(defmethod pattern-at ((pattern stripe-pattern) point)
     (if (evenp (floor (aref point 0)))
         (pattern-color1 pattern)
         (pattern-color2 pattern)))
 
-(defun stripe-at-shape (pattern shape world-point)
+(defmethod pattern-at ((pattern gradient-pattern) point)
+  (let ((distance (tsub (pattern-color2 pattern) (pattern-color1 pattern)))
+        (fraction (- (aref point 0) (floor (aref point 0)))))
+    (tadd (pattern-color1 pattern) (mults distance fraction))))
+
+(defmethod pattern-at ((pattern ring-pattern) point)
+  (if (zerop (mod
+              (floor (sqrt
+                      (+ (* (aref point 0) (aref point 0))
+                         (* (aref point 2) (aref point 2))))) 2))
+      (pattern-color1 pattern)
+      (pattern-color2 pattern)))
+
+(defmethod pattern-at ((pattern checkers-pattern) point)
+  (if (zerop (mod (+ (floor (aref point 0))
+                     (floor (aref point 1))
+                     (floor (aref point 2))) 2))
+      (pattern-color1 pattern)
+      (pattern-color2 pattern)))
+
+(defun pattern-at-shape (pattern shape world-point)
   (let* ((object-point (mm (inverse (shape-transform shape)) world-point))
          (pattern-point (mm (inverse (pattern-transform pattern)) object-point)))
-    (stripe-at pattern pattern-point)))
+    (pattern-at pattern pattern-point)))
 
 (defun lighting (material shape light point eyev normalv in-shadow)
   (let* ((color (if (material-pattern material)
-                    (stripe-at-shape (material-pattern material) shape point)
+                    (pattern-at-shape (material-pattern material) shape point)
                     (material-colour material)))
          (effective-color (hadamard-product color (light-intensity light)))
          (lightv (normalize (tsub (light-position light) point)))

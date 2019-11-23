@@ -173,6 +173,17 @@
                       (r (reflect v n)))
                  (approximately r (vectorr 1 0 0))))))
 
+(deftest pattern
+  (testing "A gradient linearly interpolates between colors"
+    (let ((pattern (make-gradient-pattern +white+ +black+ +identity-matrix+)))
+      (ok (equalp (pattern-at pattern (point 0 0 0)) +white+))))
+  (testing "A ring should extend in both x and z"
+    (let ((pattern (make-ring-pattern +white+ +black+ +identity-matrix+)))
+      (ok (equalp (pattern-at pattern (point 0 0 0)) +white+))
+      (ok (equalp (pattern-at pattern (point 0 0 1)) +black+))
+      (ok (equalp (pattern-at pattern (point 0.708 0 0.708)) +black+))
+      (ok (equalp (pattern-at pattern (point 1 0 0)) +black+)))))
+
 (deftest material
     (let ((m (make-material))
           (position (point 0 0 0)))
@@ -211,7 +222,7 @@
 (deftest lighting-pattern
     (testing "lighting with a pattern applied"
              (let ((m (make-material
-                       :pattern (make-stripe +white+ +black+ +identity-matrix+)
+                       :pattern (make-stripe-pattern +white+ +black+ +identity-matrix+)
                        :ambient 1
                        :diffuse 0
                        :specular 0))

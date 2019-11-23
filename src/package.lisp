@@ -1,10 +1,15 @@
 (defpackage raytracer
   (:use #:cl)
   (:export
-      #:+black+
-      #:+white+
-      #:+green+
-      #:+lime+
+     #:+black+
+     #:+white+
+     #:+green+
+     #:+lime+
+     #:+red+
+     #:+yellow+
+     #:+pink+
+     #:+orange+
+     #:+blue+
      #:approx
      #:approximately
      #:camera-pixel-size
@@ -37,13 +42,16 @@
      #:light-intensity
      #:light-position
      #:lighting
+     #:make-checkers-pattern
+     #:make-gradient-pattern
      #:make-intersektion
      #:make-light
      #:make-material
      #:make-plane
      #:make-ray
+     #:make-ring-pattern
      #:make-sphere
-     #:make-stripe
+     #:make-stripe-pattern
      #:make-world
      #:material-ambient
      #:material-colour
@@ -55,6 +63,7 @@
      #:mm
      #:normal-at
      #:pixel-at
+     #:pattern-at 
      #:point
      #:prepare-computations
      #:ray-direction
