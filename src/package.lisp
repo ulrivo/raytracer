@@ -43,6 +43,7 @@
      #:make-plane
      #:make-ray
      #:make-sphere
+     #:make-stripe
      #:make-world
      #:material-ambient
      #:material-colour
@@ -72,7 +73,6 @@
      #:shape-material 
      #:shape-transform
      #:sphere
-     #:stripe-pattern
      #:submatrix
      #:transform
      #:translation

@@ -16,22 +16,20 @@
   ((transform :accessor pattern-transform
               :initarg :transform
               :initform +identity-matrix+)
-   (color-func :accessor pattern-colour
-           :initarg :colour
-           :initform (lambda (x)(+black+)))))
+   (color1 :accessor pattern-color1
+           :initarg :color1
+           :initform +black+)
+   (color2 :accessor pattern-color2
+           :initarg :color2
+           :initform +white+)))
 
-(defun make-pattern (color-func transform)
-  (make-instance 'pattern
-                 :transform transform
-                 :color-func color-func))
+(defclass stripe (pattern) ())
 
-(defun make-stripe-pattern (color1 color2 transform)
-  (make-instance 'pattern
-    :transform transform
-    :color-func
-          (lambda (point)
-            (if (evenp (floor (aref point 0)))
-                color1 color2))))
+(defun make-stripe (color1 color2 transform)
+  (make-instance 'stripe
+    :color1 color1
+    :color2 color2
+    :transform transform))
 
 (defstruct material
   (colour (color 1 1 1))
@@ -39,7 +37,7 @@
   (diffuse 0.9)
   (specular 0.9)
   (shininess 200)
-  (pattern nil))  
+  (pattern nil))
 
 (defclass shape ()
   ((transform :accessor shape-transform

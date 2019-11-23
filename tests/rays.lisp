@@ -180,38 +180,38 @@
                (ok (let* ((eyev (vectorr 0 0 -1))
                           (normalv (vectorr 0 0 -1))
                           (light (make-light :position (point 0 0 -10)))
-                          (result (lighting m light position eyev normalv nil)))
+                          (result (lighting m (default-sphere) light position eyev normalv nil)))
                      (equalp result (color 1.9 1.9 1.9)))))
       (testing "lighting with the eye between the light and the surface, eye offset 45 degree"
                (ok (let* ((eyev (vectorr 0 (/ (sqrt 2) 2) (- (/ (sqrt 2) 2))))
                           (normalv (vectorr 0 0 -1))
                           (light (make-light :position (point 0 0 -10)))
-                          (result (lighting m light position eyev normalv nil)))
+                          (result (lighting m (default-sphere) light position eyev normalv nil)))
                      (equalp result (color 1 1 1)))))
       (testing "lighting with the eye opposite surface, eye offset 45 degree"
                (ok (let* ((eyev (vectorr 0 0 -1))
                           (normalv (vectorr 0 0 -1))
                           (light (make-light :position (point 0 10 -10)))
-                          (result (lighting m light position eyev normalv nil)))
+                          (result (lighting m (default-sphere) light position eyev normalv nil)))
                      (approximately result (color 0.7364 0.7364 0.7364)))))
       (testing "lighting with the eye in the path of the reflection vector"
                (ok (let* ((sq2 (- (/ (sqrt 2) 2)))
                           (eyev (vectorr 0 sq2 sq2))
                           (normalv (vectorr 0 0 -1))
                           (light (make-light :position (point 0 10 -10)))
-                          (result (lighting m light position eyev normalv nil)))
+                          (result (lighting m (default-sphere) light position eyev normalv nil)))
                      (approximately result (color 1.6363853 1.6363853 1.6363853)))))
       (testing "lighting with the eye behind the surface"
                (ok (let* ((eyev (vectorr 0 0 -1))
                           (normalv (vectorr 0 0 -1))
                           (light (make-light :position (point 0 0 10)))
-                          (result (lighting m light position eyev normalv nil)))
+                          (result (lighting m (default-sphere) light position eyev normalv nil)))
                      (approximately result (color 0.1 0.1 0.1)))))))
 
 (deftest lighting-pattern
     (testing "lighting with a pattern applied"
              (let ((m (make-material
-                       :pattern (stripe-pattern +white+ +black+)
+                       :pattern (make-stripe +white+ +black+ +identity-matrix+)
                        :ambient 1
                        :diffuse 0
                        :specular 0))
@@ -219,9 +219,9 @@
                    (normalv (vectorr 0 0 -1))
                    (light (make-light :position (point 0 0 -10)
                                       :intensity (color 1 1 1))))
-               (ok (equalp (lighting m light (point 0.9 0 0) eyev normalv nil)
+               (ok (equalp (lighting m (default-sphere) light (point 0.9 0 0) eyev normalv nil)
                            +white+))
-               (ok (equalp (lighting m light (point 1.1 0 0) eyev normalv nil)
+               (ok (equalp (lighting m (default-sphere) light (point 1.1 0 0) eyev normalv nil)
                            +black+)))))
 
 (deftest intersect-world
@@ -345,5 +345,5 @@
                                   :intensity (color 1 1 1)))
                 (in-shadow t))
             (equalp (color 0.1 0.1 0.1)
-                    (lighting m light (point 0 0 0)
+                    (lighting m (default-sphere) light (point 0 0 0)
                               eyev normalv in-shadow))))))
