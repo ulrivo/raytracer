@@ -8,10 +8,10 @@
                   :specular 0
                   :pattern (make-stripe-pattern +lime+ +green+ +identity-matrix+))))
          (back (make-plane
-                (mm (translation 0 0 5) (rotation-x (* (/ pi 2) 3)))
+                (mm (translation 0 0 5) (rotation-x (/ pi 2) ))
                  (make-material
                   :colour (color 0.1 0.1 1)
-                  :pattern (make-checkers-pattern +lime+ +green+ +identity-matrix+)
+                  :pattern (make-checkers-pattern +blue+ +green+ +identity-matrix+)
                   :specular 0)))
          (middle (make-sphere
                   (translation -0.5 1 0.5)
