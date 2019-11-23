@@ -28,29 +28,29 @@
 (defclass ring-pattern (pattern) ())
 (defclass checkers-pattern (pattern) ())
 
-(defun make-stripe-pattern (color1 color2 transform)
+(defun make-stripe-pattern (color1 color2 &optional (transform +identity-matrix+))
   (make-instance 'stripe-pattern
                  :color1 color1
                  :color2 color2
                  :transform transform))
 
-(defun make-gradient-pattern (color1 color2 transform)
+(defun make-gradient-pattern (color1 color2 &optional (transform +identity-matrix+))
   (make-instance 'gradient-pattern
                  :color1 color1
                  :color2 color2
                  :transform transform))
 
-(defun make-ring-pattern (color1 color2 transform)
+(defun make-ring-pattern (color1 color2 &optional (transform +identity-matrix+))
   (make-instance 'ring-pattern
                  :color1 color1
                  :color2 color2
                  :transform transform))
 
-(defun make-checkers-pattern (color1 color2 transform)
+(defun make-checkers-pattern (color1 color2 &optional (transform +identity-matrix+))
   (make-instance 'checkers-pattern
-    :color1 color1
-    :color2 color2
-    :transform transform))
+                 :color1 color1
+                 :color2 color2
+                 :transform transform))
 
 (defstruct material
   (colour (color 1 1 1))
