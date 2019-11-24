@@ -1,4 +1,5 @@
 (in-package :raytracer)
+(declaim (optimize speed))
 
 (defconstant +white+ (vector 1. 1. 1. ))
 (defconstant +black+ (vector 0. 0. 0. ))
@@ -20,7 +21,11 @@
 
 ;; tuple additon and subtraciton
 (defun tadd (v w)
-  (map 'vector #'+ v w))
+  (let ((result (make-array 4)))
+    (dotimes (i 4)
+      (setf (aref result i)
+            (+ (aref v i) (aref w i))))
+    result))
 
 (defun tsub (v w)
   (map 'vector #'- v w))
