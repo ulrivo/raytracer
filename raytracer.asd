@@ -1,16 +1,17 @@
 (defsystem "raytracer"
-  :version "0.1.0"
+  :version "0.2.0"
   :author "Ulrich Vollert <lisp@ulrivo.de>"
   :license ""
-  :depends-on ("png")
+  :depends-on ("png"
+               "3d-vectors"
+               "3d-matrices")
   :components ((:module "src"
                 :components
                 ((:file "package")
-                 (:file "tuples")
-                 (:file "matrices")
-                 (:file "shapes")
-                 (:file "rays")
-                 (:file "views"))))
+                 (:file "constants")
+                 (:file "structures")
+                 (:file "utils")
+                 (:file "rays"))))
   :description "Raytracer by Jamis Buck"
   :in-order-to ((test-op (test-op "raytracer/tests"))))
 

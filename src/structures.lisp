@@ -1,12 +1,14 @@
 (in-package :raytracer)
+(use-package :3d-matrices)
+
+(defun point (x y z) (vec4 x y z 1))
+(defun vectorr (x y z) (vec4 x y z 0))
+
+(defun color (x y z) (vec3 x y z))
 
 (defstruct ray
   (origin (point 0 0 0))
   (direction (vectorr 0 0 1)))
-
-(defstruct intersektion
-  (tt 0)
-  (object (default-sphere)))
 
 (defstruct light
   (position (point 0 0 0))
@@ -72,10 +74,15 @@
 
 (defun default-sphere () (make-instance 'sphere))
 
+
 (defun make-sphere (transform material)
   (make-instance 'sphere
                  :transform transform
                  :material material))
+
+(defstruct intersektion
+  (tt 0)
+  (object (default-sphere)))
 
 (defclass plane (shape) ())
 
@@ -101,7 +108,7 @@
               :diffuse 0.7
               :specular 0.2))
             (make-sphere
-             (scaling 0.5 0.5 0.5)
+             (mscaling (vec 0.5 0.5 0.5))
              (make-material)))))
 
 (defstruct computations

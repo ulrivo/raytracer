@@ -1,5 +1,5 @@
 (defpackage raytracer
-  (:use #:cl)
+  (:use :cl :3d-vectors :3d-matrices )
   (:export
      #:+black+
      #:+white+
@@ -37,7 +37,7 @@
      #:intersect-world
      #:intersektion-object
      #:intersektion-tt
-     #:inverse
+     #:minv
      #:is-shadowed
      #:light-intensity
      #:light-position
@@ -60,7 +60,7 @@
      #:material-shininess
      #:material-specular
      #:minor
-     #:mm
+     #:m*
      #:normal-at
      #:pixel-at
      #:pattern-at 
@@ -86,7 +86,7 @@
      #:transform
      #:translation
      #:vectorr
-     #:view-transform
+     #:mlookat
      #:world-light
      #:world-shapes
      )

@@ -5,34 +5,32 @@
     (ok (let* ((from (point 0 0 0))
                (to (point 0 0 -1))
                (up (vectorr 0 1 0)))
-          (equalp (view-transform from to up)
+          (equalp (mlookat from to up)
                   +identity-matrix+))))
 
   (testing "transformation matrix looking in positive z direction"
     (ok (let* ((from (point 0 0 0))
                (to (point 0 0 1))
                (up (vectorr 0 1 0)))
-          (equalp (view-transform from to up)
-                  (scaling -1 1 -1)))))
+          (equalp (mlookat from to up)
+                  (mscaling (vec -1 1 -1))))))
 
   (testing "transformation matrix moves the world"
     (ok (let* ((from (point 0 0 8))
                (to (point 0 0 0))
                (up (vectorr 0 1 0)))
-          (equalp (view-transform from to up)
-                  (translation 0 0 -8)))))
+          (equalp (mlookat from to up)
+                  (mtranslation (vec 0 0 -8))))))
 
   (testing "an arbitrary transformation matrix"
     (ok (let* ((from (point 1 3 2))
                (to (point 4 -2 8))
                (up (vectorr 1 1 0)))
-          (approximately (view-transform from to up)
-                  (make-array '(4 4)
-                              :initial-contents
-                              '((-0.50709  0.50709   0.67612  -2.36643)
-                                (0.76772  0.60609   0.12122  -2.82843)
-                                (-0.35857  0.59761  -0.71714   0.00000)
-                                (0 0 0 1))))))))
+          (approximately (mlookat from to up)
+                  (mat4 0.50709  0.50709   0.67612  -2.36643
+                                0.76772  0.60609   0.12122  -2.82843
+                                -0.35857  0.59761  -0.71714   0.00000
+                                0 0 0 1))))))
 
 (deftest camera-pixel
   (testing "pixel size for a horizontal canvas"
@@ -60,7 +58,7 @@
 
   (testing "a ray when the camera is transformed"
     (let* ((c (create-camera 201 101 (/ pi 2)
-              (mm (rotation-y (/ pi 4)) (translation 0 -2 5))))
+              (m* (rotation-y (/ pi 4)) (translation 0 -2 5))))
           (r (ray-for-pixel c 100 50)))
       (ok (equalp (ray-origin r) (point 0 2 -5)))
       (ok (approximately (ray-direction r)
@@ -73,7 +71,7 @@
                (to (point 0 0 0))
                (up (vectorr 0 1 0))
                (c (create-camera 11 11 (/ pi 2)
-                      (view-transform from to up))))
+                      (mlookat from to up))))
           (approximately (pixel-at (render c w) 5 5)
                          (color 0.38066 0.47583 0.2855))))))
 
