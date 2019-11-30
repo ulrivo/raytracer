@@ -1,6 +1,10 @@
 (in-package :raytracer)
-(use-package :3d-vectors)
-(use-package :3d-matrices)
+
+(defun approximately (m1 m2)
+  (typecase m1
+    (mat (< (m2norm (m- m1 m2)) (* +epsilon+ 16)))
+    (vec (< (v2norm (v- m1 m2)) (* +epsilon+ 4)))
+    (otherwise (< (abs (- m1 m2)) +epsilon+))))
 
 (defun save-canvas (canvas filename)
   "save a canvas to a file"

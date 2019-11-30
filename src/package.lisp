@@ -10,6 +10,7 @@
      #:+pink+
      #:+orange+
      #:+blue+
+     #:approximately
      #:camera-pixel-size
      #:camera-transform
      #:cofactor

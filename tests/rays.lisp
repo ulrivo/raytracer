@@ -105,12 +105,12 @@
 (deftest moving-ray
     (let ((ray (make-ray :origin (point 1 2 3) :direction (vectorr 0 1 0))))
       (testing "translating a ray"
-               (ok (let* ((m (translation 3 4 5))
+        (ok (let* ((m (mtranslation (vec 3 4 5)))
                           (r2 (transform ray m)))
                      (and (equalp (ray-origin r2) (point 4 6 8))
                           (equalp (ray-direction r2) (vectorr 0 1 0))))))
       (testing "scaling a ray"
-               (ok (let* ((m (scaling (vec 2 3 4)))
+               (ok (let* ((m (mscaling (vec 2 3 4)))
                           (r2 (transform ray m)))
                      (and (equalp (ray-origin r2) (point 2 6 12))
                           (equalp (ray-direction r2) (vectorr 0 3 0))))))))
@@ -118,7 +118,7 @@
 (deftest transform-sphere
     (let ((ray (make-ray :origin (point 0 0 -5) :direction (vectorr 0 0 1))))
       (testing "intersecting a scaled sphere with a ray"
-        (let* ((s (make-sphere (scaling (vec 2 2 2)) (make-material)))
+        (let* ((s (make-sphere (mscaling (vec 2 2 2)) (make-material)))
                     (xs (intersect s ray)))
                (princ xs)
           (ok (= 2 (length xs)))
@@ -143,11 +143,11 @@
 
 (deftest normal-on-transformed-sphere
     (testing "normal on a translated sphere"
-             (ok (let* ((s (make-sphere (translation 0 1 0) (make-material)))
+      (ok (let* ((s (make-sphere (mtranslation (vec  0 1 0)) (make-material)))
                         (n (normal-at s (point 0 1.70711 -0.70711))))
                    (approximately n (vectorr 0 0.70711 -0.70711)))))
   (testing "normal on a transformed sphere"
-           (ok (let* ((m (m* (scaling 1 0.5 1) (rotation-z (/ pi 5))))
+    (ok (let* ((m (m* (mscaling (vec 1 0.5 1)) (mrotation (vec 0 0 1) (/ pi 5))))
                       (s (make-sphere m (make-material)))
                       (n (normal-at s (point 0 (/ (sqrt 2) 2) (- (/ (sqrt 2) 2))))))
                  (approximately n (vectorr 0 0.97014 -0.24254))))))
@@ -274,7 +274,7 @@
   (testing "the hit should offset the point"
     (let* ((r (make-ray :origin (point 0 0 -5)
                         :direction (vectorr 0 0 1)))
-          (shape (make-sphere (translation 0 0 1) (make-material)))
+           (shape (make-sphere (mtranslation (vec 0 0 1)) (make-material)))
           (i (make-intersektion :tt 5 :object shape))
            (comps (prepare-computations i r)))
       (ok (< (aref (computations-over-point comps) 2)
@@ -310,7 +310,7 @@
 
   (testing "shade_hit() is given an intersection in shadow"
            (ok (let* ((s1 (default-sphere))
-                      (s2 (make-sphere (translation 0 0 10) (make-material)))
+                      (s2 (make-sphere (mtranslation (vec 0 0 10)) (make-material)))
                       (w (make-world
                           :light (make-light
                                   :position (point 0 0 -10)

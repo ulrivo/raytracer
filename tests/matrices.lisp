@@ -3,12 +3,6 @@
 ;; NOTE: To run this test file, execute `(asdf:test-system :raytracer)'
 ;; in your Lisp.
 
-(defun approximately (m1 m2)
-  (typecase m1
-    (mat (< (m2norm (m- m1 m2)) +epsilon+))
-    (vec (< (v2norm (v- m1 m2)) +epsilon+))
-    (otherwise (< (abs (- m1 m2)) +epsilon*))))
-
 (deftest matrix-multiplication
   (testing "correct matrix multiplication"
     (ok (equalp (m*
@@ -23,15 +17,15 @@
 
 (deftest mdet
   (testing "mdet of 2x2-matrix"
-    (ok (eql 17
+    (ok (= 17
              (mdet
               (mat 1 5 -3 2)))))
   (testing "mdet of 3x3-matrix"
-    (ok (eql -196
+    (ok (= -196
              (mdet
               (mat 1 2 6 -5 8 -4 2 6 4)))))
   (testing "mdet of 4x4-matrix"
-    (ok (eql -4071
+    (ok (= -4071
              (mdet
               (mat -2 -8 3 5 -3 1 7 3 1 2 -9 6 -6 7 7 -9))))))
 
@@ -96,7 +90,7 @@
          (point 0 0 1))))
   (testing "around y-axis"
     (ok (approximately
-         (let ((full-quarter (mrotation (vec 1 0 0) (/ pi 2)))
+         (let ((full-quarter (mrotation (vec 0 1 0) (/ pi 2)))
                (p (point 0 0 1 )))
            (m* full-quarter p))
          (point 1 0 0))))
@@ -106,8 +100,6 @@
                (p (point 0 1 0 )))
            (m* full-quarter p))
          (point -1 0 0)))))
-
-
 
 (deftest combining
   (testing "combining transformation matrices"
