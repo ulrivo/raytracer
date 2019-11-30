@@ -1,5 +1,4 @@
 (in-package :raytracer)
-(use-package :3d-matrices)
 
 (defun point (x y z) (vec4 x y z 1))
 (defun vectorr (x y z) (vec4 x y z 0))

@@ -1,7 +1,5 @@
 (in-package :raytracer)
 
-(use-package :3d-vectors)
-
 (defun ray-position (ray s)
   (v+ (ray-origin ray) (v* (ray-direction ray) s)))
 
@@ -27,10 +25,10 @@
            (make-intersektion :tt t2 :object s))))))
 
 (defmethod local-intersect ((p plane) ray)
-  (let ((y (aref (ray-direction ray) 1)))
+  (let ((y (vy (ray-direction ray))))
         (if (< (abs y) +epsilon+)
             nil
-            (let ((tt (- (/ (aref (ray-origin ray) 1) y))))
+            (let ((tt (- (/ (vy (ray-origin ray)) y))))
               (list (make-intersektion :tt tt :object p))))))
 
 (defun intersect (shape ray)

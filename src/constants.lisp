@@ -1,8 +1,5 @@
 (in-package :raytracer)
 
-(use-package :3d-vectors)
-(use-package :3d-matrices)
-
 (defconstant +epsilon+ 0.00001)
 
 (defconstant +white+ (vec 1. 1. 1. ))

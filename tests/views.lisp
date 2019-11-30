@@ -27,18 +27,18 @@
                (to (point 4 -2 8))
                (up (vectorr 1 1 0)))
           (approximately (mlookat from to up)
-                  (mat4 0.50709  0.50709   0.67612  -2.36643
+                  (mat 0.50709  0.50709   0.67612  -2.36643
                                 0.76772  0.60609   0.12122  -2.82843
                                 -0.35857  0.59761  -0.71714   0.00000
                                 0 0 0 1))))))
 
 (deftest camera-pixel
   (testing "pixel size for a horizontal canvas"
-    (ok (approx (camera-pixel-size (create-camera 200 125 (/ pi 2)))
+    (ok (approximately (camera-pixel-size (create-camera 200 125 (/ pi 2)))
                        0.01)))
 
   (testing "pixel size for a vertical canvas"
-    (ok (approx (camera-pixel-size
+    (ok (approximately (camera-pixel-size
                  (create-camera 125 200 (/ pi 2)))
                 0.01))))
 

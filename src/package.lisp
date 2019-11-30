@@ -10,8 +10,6 @@
      #:+pink+
      #:+orange+
      #:+blue+
-     #:approx
-     #:approximately
      #:camera-pixel-size
      #:camera-transform
      #:cofactor
@@ -28,7 +26,6 @@
      #:default-plane
      #:default-sphere
      #:default-world
-     #:determinant
      #:draw
      #:+epsilon+
      #:hit

@@ -1,5 +1,7 @@
 (in-package :raytracer/tests/rays)
 
+(use-package :3d-matrices)
+
 ;; NOTE: To run this test file, execute `(asdf:test-system :raytracer)'
 ;; in your Lisp.
 

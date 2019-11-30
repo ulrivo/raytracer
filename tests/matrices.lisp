@@ -3,40 +3,46 @@
 ;; NOTE: To run this test file, execute `(asdf:test-system :raytracer)'
 ;; in your Lisp.
 
+(defun approximately (m1 m2)
+  (typecase m1
+    (mat (< (m2norm (m- m1 m2)) +epsilon+))
+    (vec (< (v2norm (v- m1 m2)) +epsilon+))
+    (otherwise (< (abs (- m1 m2)) +epsilon*))))
+
 (deftest matrix-multiplication
   (testing "correct matrix multiplication"
     (ok (equalp (m*
-                 (mat4 1 2 3 4 5 6 7 8 9 8 7 6 5 4 3 2)
-                 (mat4 -2 1 2 3 3 2 1 -1 4 3 6 5 1 2 7 8)
-                (mat4 20 22 50 48 44 54 114 108 40 58 110 102 16 26 46 42)))))
+                 (mat 1 2 3 4 5 6 7 8 9 8 7 6 5 4 3 2)
+                 (mat -2 1 2 3 3 2 1 -1 4 3 6 5 1 2 7 8))
+                (mat 20 22 50 48 44 54 114 108 40 58 110 102 16 26 46 42))))
   (testing "correct matrix and vector multiplication"
     (ok (equalp (m*
-                 (mat4 1 2 3 4 2 4 4 2 8 6 4 1 0 0 0 1)
+                 (mat 1 2 3 4 2 4 4 2 8 6 4 1 0 0 0 1)
                  (point 1 2 3))
                 (point 18 24 33)))))
 
-(deftest determinant
-  (testing "determinant of 2x2-matrix"
+(deftest mdet
+  (testing "mdet of 2x2-matrix"
     (ok (eql 17
-             (determinant
-              (mat2 1 5 -3 2)))))
-  (testing "determinant of 3x3-matrix"
+             (mdet
+              (mat 1 5 -3 2)))))
+  (testing "mdet of 3x3-matrix"
     (ok (eql -196
-             (determinant
-              (mat3 1 2 6 -5 8 -4 2 6 4)))))
-  (testing "determinant of 4x4-matrix"
+             (mdet
+              (mat 1 2 6 -5 8 -4 2 6 4)))))
+  (testing "mdet of 4x4-matrix"
     (ok (eql -4071
-             (determinant
+             (mdet
               (mat -2 -8 3 5 -3 1 7 3 1 2 -9 6 -6 7 7 -9))))))
 
 (deftest inverse
-  (testing "error when determinant is zero"
+  (testing "error when mdet is zero"
     (ok (signals
-            (minv (mat3 0 0 0 2 -1 -7 6 -1 5)))))
+            (minv (mat 0 0 0 2 -1 -7 6 -1 5)))))
   (testing "minv of a 4x4-matrix"
     (ok (approximately
-         (minv (mat4 -5 2 6 -8 1 -5 1 8 7 7 -6 -7 1 -3 7 4))
-         (mat4 0.21805 0.45113 0.24060 -0.04511
+         (minv (mat -5 2 6 -8 1 -5 1 8 7 7 -6 -7 1 -3 7 4))
+         (mat 0.21805 0.45113 0.24060 -0.04511
                -0.80827 -1.45677 -0.44361 0.52068
                -0.07895 -0.22368 -0.05263 0.19737
                -0.52256 -0.81391 -0.30075 0.30639 )))))
@@ -108,7 +114,7 @@
     (ok (equalp
          (let ((p (point 1 0 1))
                (a (mrotation (vec 1 0 0) (/ pi 2)))
-               (b (mscaling (vec 5 5 5))))
-           (c (mtranslation (vec 10 5 7)))
+               (b (mscaling (vec 5 5 5)))
+               (c (mtranslation (vec 10 5 7))))
            (m* c (m* b (m* a p))))
          (point 15 0 7)))))
