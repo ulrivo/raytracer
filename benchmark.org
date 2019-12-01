@@ -1,0 +1,25 @@
+* Benchmark für Raytracer
+
+** Ende Kapitel 8, in J and Ocaml
+
+       - Die Ocaml-Version beinhaltet bereits Schatten, die J-Version noch nicht
+         (Ende Kapitel 7).
+       - Kamera 300 x 150 
+
+
+|             |  JQt | OCAML.byte | OCAML.native |
+|-------------+------+------------+--------------|
+| iMac        |  7.3 |        9.4 |          0.3 |
+| Macbook Air |  9.3 |       11.1 |          0.3 |
+| Gemini      | 32.3 |       55.2 |          2.0 |
+
+
+** Ende Kapitel 10 in SBCL Lisp 
+
+   - Macbook Pro 2018, 2,6 GHz Intel Core i7
+
+|         | meine Matrix | 3d-matrices |
+|---------+--------------+-------------|
+| 300x150 |       10.138 |       0.308 |
+| 400x200 |       18.295 |       0.398 |
+| 800x400 |       74.140 |       1.599 |
