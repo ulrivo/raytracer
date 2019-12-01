@@ -277,10 +277,10 @@
            (shape (make-sphere (mtranslation (vec 0 0 1)) (make-material)))
           (i (make-intersektion :tt 5 :object shape))
            (comps (prepare-computations i r)))
-      (ok (< (aref (computations-over-point comps) 2)
+      (ok (< (vz (computations-over-point comps))
              (- (/ +epsilon+ 2))))
-      (ok (> (aref (computations-point comps) 2)
-             (aref (computations-over-point comps) 2))))))
+      (ok (> (vz (computations-point comps))
+             (vz (computations-over-point comps)))))))
 
 
 (deftest shade-hit

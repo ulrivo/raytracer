@@ -6,6 +6,15 @@
     (vec (< (v2norm (v- m1 m2)) (* +epsilon+ 4)))
     (otherwise (< (abs (- m1 m2)) +epsilon+))))
 
+(defun canvas (width height)
+  (make-array (list width height)))
+
+(defun write-pixel (canvas x y color)
+  (setf (aref canvas x y) color))
+
+(defun pixel-at (canvas x y)
+  (aref canvas x y))
+
 (defun save-canvas (canvas filename)
   "save a canvas to a file"
   (let* ((dimension (array-dimensions canvas))

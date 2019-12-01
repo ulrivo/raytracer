@@ -72,7 +72,7 @@
 
 (defmethod pattern-at ((pattern gradient-pattern) point)
   (let ((distance (v- (pattern-color2 pattern) (pattern-color1 pattern)))
-        (fraction (- (aref point 0) (floor (aref point 0)))))
+        (fraction (- (vx point) (floor (vx point)))))
     (v+ (pattern-color1 pattern) (v* distance fraction))))
 
 (defmethod pattern-at ((pattern ring-pattern) point)
@@ -134,14 +134,14 @@
          (normalv (normal-at object point))
          (inside (< (v. normalv eyev) 0)))
     (when inside (setf normalv (v* normalv -1)))
-     :over-point (v+ point (v* normalv +epsilon+))
+    (make-computations
      :tt tt
      :object object
      :point point
      :over-point (v+ point (v* normalv +epsilon+))
      :eyev eyev
      :normalv normalv
-     :inside inside))
+     :inside inside)))
 
 (defun is-shadowed (world point)
   (let* ((v (v- (light-position (world-light world)) point))
