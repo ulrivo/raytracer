@@ -6,6 +6,21 @@
     (vec (< (v2norm (v- m1 m2)) (* +epsilon+ 4)))
     (otherwise (< (abs (- m1 m2)) +epsilon+))))
 
+(defun translation (x y z)
+  (mtranslation (vec x y z)))
+
+(defun scaling (x y z)
+  (mscaling (vec x y z)))
+
+(defun rotation-x (p)
+  (mrotation (vec 1 0 0) p))
+
+(defun rotation-y (p)
+  (mrotation (vec 0 1 0) p))
+
+(defun rotation-z (p)
+  (mrotation (vec 0 0 1) p))
+
 (defun canvas (width height)
   (make-array (list width height)))
 
@@ -23,15 +38,15 @@
          (new (png:make-image h w 3)))
     (dotimes (j h)
       (dotimes (i w)
-        (let ((col (aref canvas i j)))
-          (dotimes (k 3)
-            (setf (aref new j i k) (min 255 (truncate (* 255 (elt col k)))))))))
+        (let ((col (vclamp 0 (v* (aref canvas i j) 256) 255)))
+          (setf (aref new j i 0) (truncate (vx col)))
+          (setf (aref new j i 1) (truncate (vy col)))
+          (setf (aref new j i 2) (truncate (vz col))))))
     (with-open-file (output filename :element-type '(unsigned-byte 8)
                                      :direction :output
                                      :if-exists :supersede
                                      :if-does-not-exist :create)
       (png:encode new output))))
-
 
 (defun ray-for-pixel (camera px py)
   (let* ((xoffset (* (camera-pixel-size camera) (+ px 0.5)))

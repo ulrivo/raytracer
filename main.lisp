@@ -22,15 +22,15 @@
                    :specular 0.3)))
          (right (make-sphere
                  (m* (translation 1.5 1 -0.5)
-                     (scaling 0.5 0.5 0.5)))
+                     (scaling 0.5 0.5 0.5))
                  (make-material
                   :colour (color 0.5 1 0.1)
                   :diffuse 0.7
-                  :pattern (make-ring-pattern +red+ +blue+ (scaling 0.1 0.1 0.1)))
+                  :pattern (make-ring-pattern +red+ +blue+ (scaling 0.1 0.1 0.1))
                   :specular 0.3)))
          (left (make-sphere
                 (m* (translation -1.5 0.33 -0.75)
-                    (scaling 0.33 0.33 0.33)))
+                    (scaling 0.33 0.33 0.33))
                 (make-material
                  :colour (color 1 0.8 0.1)
                  :diffuse 0.7
