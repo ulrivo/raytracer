@@ -73,9 +73,10 @@
           (approximately (pixel-at (render c w) 5 5)
                          (color 0.38066 0.47583 0.2855))))))
 
+;; is-shadowed
 (deftest is-shadowed
     (let ((w (default-world)))
-      (testing "there is no shadow when nothing is collinear with point and light"
+      (testing "there is no shadow XXX when nothing is collinear with point and light"
                (ng (is-shadowed w (point 0 10 0))))
       (testing "The shadow when an object is between the point and the light"
                (ok (is-shadowed w (point 10 -10 10))))
@@ -83,3 +84,17 @@
                (ng (is-shadowed w (point -20 20 -20))))
       (testing "there is no shadow when an object is behind the point"
                (ng (is-shadowed w (point -2 2 -2))))))
+
+;; reflection
+(deftest reflection
+  (testing "precomputing the refleciton vector"
+    (ok (let* ((p (default-plane))
+           (sqr (/ (sqrt 2) 2))
+           (r (make-ray :origin (point 0 1 -1)
+                       :direction (vectorr 0 (- sqr) sqr)))
+            (i (make-intersektion :tt (sqrt 2)
+                                  :object p))
+           (comps (prepare-computations i r)))
+      (approximately
+             (computations-reflectv comps)
+             (vectorr 0 sqr sqr))))))

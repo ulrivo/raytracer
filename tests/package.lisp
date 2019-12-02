@@ -28,6 +28,7 @@
      #:computations-object
      #:computations-over-point
      #:computations-point
+     #:computations-reflectv
      #:computations-tt
      #:default-plane
      #:default-sphere

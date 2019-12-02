@@ -141,7 +141,8 @@
      :over-point (v+ point (v* normalv +epsilon+))
      :eyev eyev
      :normalv normalv
-     :inside inside)))
+     :inside inside
+     :reflectv (reflect (ray-direction ray) normalv))))
 
 (defun is-shadowed (world point)
   (let* ((v (v- (light-position (world-light world)) point))
