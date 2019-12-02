@@ -2,47 +2,19 @@
   (:use :cl :3d-vectors :3d-matrices )
   (:export
      #:+black+
-     #:+white+
-     #:+green+
-     #:+lime+
-     #:+red+
-     #:+yellow+
-     #:+pink+
-     #:+orange+
      #:+blue+
-     #:approximately
-     #:camera-pixel-size
-     #:camera-transform
-     #:cofactor
-     #:color
-     #:color-at
-     #:computations-eyev
-     #:computations-inside
-     #:computations-normalv
-     #:computations-object
-     #:computations-over-point 
-     #:computations-point
-     #:computations-tt
-     #:create-camera
-     #:default-plane
-     #:default-sphere
-     #:default-world
-     #:draw
      #:+epsilon+
-     #:hit
+     #:+green+
      #:+identity-matrix+
-     #:intersect
-     #:intersect-world
-     #:intersektion-object
-     #:intersektion-tt
-     #:minv
-     #:is-shadowed
-     #:light-intensity
-     #:light-position
-     #:lighting
+     #:+lime+
+     #:+orange+
+     #:+pink+
+     #:+red+
+     #:+white+
+     #:+yellow+
+     #:create-camera
      #:make-checkers-pattern
      #:make-gradient-pattern
-     #:make-intersektion
      #:make-light
      #:make-material
      #:make-plane
@@ -51,41 +23,11 @@
      #:make-sphere
      #:make-stripe-pattern
      #:make-world
-     #:material-ambient
-     #:material-colour
-     #:material-diffuse
-     #:material-pattern 
-     #:material-shininess
-     #:material-specular
-     #:minor
-     #:m*
-     #:normal-at
-     #:pixel-at
-     #:pattern-at 
-     #:point
-     #:prepare-computations
-     #:ray-direction
-     #:ray-for-pixel
-     #:ray-origin
-     #:ray-position
-     #:reflect
      #:render
      #:rotation-x
      #:rotation-y
      #:rotation-z
      #:save-canvas
      #:scaling
-     #:shade-hit
-     #:shearing
-     #:shape-material 
-     #:shape-transform
-     #:sphere
-     #:submatrix
-     #:transform
      #:translation
-     #:vectorr
-     #:mlookat
-     #:world-light
-     #:world-shapes
-     )
-  )
+     ))

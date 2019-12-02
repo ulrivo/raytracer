@@ -3,10 +3,71 @@
         :raytracer
         :3d-vectors
         :3d-matrices
-        :rove))
+        :rove)
+  (:import-from :raytracer
+                #:approximately
+                #:default-plane
+                #:default-sphere
+                #:default-world
+                #:point
+                #:vectorr))
 (defpackage raytracer/tests/rays
   (:use :cl
         :raytracer
         :3d-vectors
         :3d-matrices
-        :rove))
+        :rove)
+  (:import-from :raytracer
+     #:approximately
+     #:camera-pixel-size
+     #:color
+     #:color-at
+     #:computations-eyev
+     #:computations-inside
+     #:computations-normalv
+     #:computations-object
+     #:computations-over-point
+     #:computations-point
+     #:computations-tt
+     #:default-plane
+     #:default-sphere
+     #:default-world
+     #:hit
+     #:+identity-matrix+
+     #:intersect
+     #:intersect-world
+     #:intersektion-object
+     #:intersektion-tt
+     #:is-shadowed
+     #:lighting
+     #:make-gradient-pattern
+     #:make-intersektion
+     #:make-light
+     #:make-material
+     #:make-ray
+     #:make-ring-pattern
+     #:make-sphere
+     #:make-stripe-pattern
+     #:make-world
+     #:material-ambient
+     #:material-colour
+     #:material-diffuse
+     #:material-pattern
+     #:material-shininess
+     #:material-specular
+     #:normal-at
+     #:pattern-at
+     #:pixel-at
+     #:point
+     #:prepare-computations
+     #:ray-direction
+     #:ray-for-pixel
+     #:ray-origin
+     #:ray-position
+     #:reflect
+     #:shade-hit
+     #:shape-material
+     #:transform
+     #:vectorr
+     #:world-light
+     #:world-shapes))
