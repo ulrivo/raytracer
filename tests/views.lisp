@@ -124,3 +124,24 @@
                  (color (reflected-color w comps)))
             (approximately color
                            (color 0.19032 0.2379 0.14274)))))))
+
+(deftest mutually-reflective
+  (testing "color-at with mutually reflective surfaces"
+    (let* ((w (default-world))
+           (lower (make-plane
+                   (translation 0 -1 0)
+                   (make-material
+                    :reflective 1)))
+           (upper (make-plane
+                   (translation 0 1 0)
+                   (make-material
+                    :reflective 1)))
+           (r (make-ray :origin (point 0 0 0)
+                        :direction (vectorr 0 1 0))))
+      (setf (world-light w) (make-light
+                             :position (point 0 0 0)
+                             :intensity (color 1 1 1)))
+      (setf (world-shapes w) (append
+                              (list lower upper)
+                              (world-shapes w)))
+      (ng (equalp +black+ (color-at w r))))))
