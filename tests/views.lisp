@@ -98,3 +98,29 @@
       (approximately
              (computations-reflectv comps)
              (vectorr 0 sqr sqr))))))
+
+(deftest reflected-color
+  (testing "the reflected color for a nonreflective material"
+    (ok (let* ((w (default-world))
+               (r (make-ray :origin (point 0 0 0)
+                            :direction (vectorr 0 0 1)))
+               (shape (second (world-shapes w))))
+          (setf (material-ambient (shape-material shape)) 1)
+          (let* ((i (make-intersektion :tt 1 :object shape))
+                 (comps (prepare-computations i r))
+                 (color (reflected-color w comps)))
+            (equalp color +black+)))))
+  (testing "the reflected color for a reflective material"
+    (ok (let* ((w (default-world))
+               (sqr (/ (sqrt 2) 2))
+               (r (make-ray :origin (point 0 0 -3)
+                            :direction (vectorr 0 (- sqr) sqr )))
+               (shape (make-plane
+                       (translation 0 -1 0)
+                       (make-material :reflective 0.5))))
+          (setf (world-shapes w) (cons shape (world-shapes w)))
+          (let* ((i (make-intersektion :tt (sqrt 2) :object shape))
+                 (comps (prepare-computations i r))
+                 (color (reflected-color w comps)))
+            (approximately color
+                           (color 0.19032 0.2379 0.14274)))))))

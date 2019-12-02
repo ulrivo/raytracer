@@ -66,6 +66,7 @@
      #:ray-origin
      #:ray-position
      #:reflect
+     #:reflected-color
      #:shade-hit
      #:shape-material
      #:transform

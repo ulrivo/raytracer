@@ -322,7 +322,22 @@
                                             :object s2))
                       (comps (prepare-computations i r)))
                  (equalp (color 0.1 0.1 0.1)
-                         (shade-hit w comps))))))
+                         (shade-hit w comps)))))
+
+  (testing "shade-hit with a reflective material"
+    (ok (let* ((w (default-world))
+               (sqr (/ (sqrt 2) 2))
+               (r (make-ray :origin (point 0 0 -3)
+                            :direction (vectorr 0 (- sqr) sqr )))
+               (shape (make-plane
+                       (translation 0 -1 0)
+                       (make-material :reflective 0.5))))
+          (setf (world-shapes w) (cons shape (world-shapes w)))
+          (let* ((i (make-intersektion :tt (sqrt 2) :object shape))
+                 (comps (prepare-computations i r))
+                 (color (shade-hit w comps)))
+            (approximately color
+                           (color 0.87677 0.92436 0.82918)))))))
 
 (deftest color-at
   (testing "the color when a ray misses"

@@ -126,6 +126,17 @@
          (world-shapes world))
         #'< :key #'intersektion-tt))
 
+(defun reflected-color (world comps)
+  (if (= 0 (material-reflective (shape-material (computations-object comps))))
+      +black+
+      (progn
+        (let* ((reflect-ray (make-ray :origin (computations-over-point comps)
+                                     :direction (computations-reflectv comps)))
+              (color (color-at world reflect-ray)))
+          (v* color
+              (material-reflective (shape-material
+                                    (computations-object comps))))))))
+
 (defun prepare-computations (intersektion ray)
   (let* ((tt (intersektion-tt intersektion))
          (object (intersektion-object intersektion))
@@ -154,14 +165,16 @@
     (and h (< (intersektion-tt h) distance))))
 
 (defun shade-hit (world comps)
-  (let ((shadowed (is-shadowed world (computations-over-point comps))))
-    (lighting (shape-material (computations-object comps))
-              (computations-object comps)
-              (world-light world)
-              (computations-point comps)
-              (computations-eyev comps)
-              (computations-normalv comps)
-              shadowed)))
+  (let* ((shadowed (is-shadowed world (computations-over-point comps)))
+         (surface (lighting (shape-material (computations-object comps))
+                           (computations-object comps)
+                           (world-light world)
+                           (computations-point comps)
+                           (computations-eyev comps)
+                           (computations-normalv comps)
+                           shadowed))
+         (reflected (reflected-color world comps)))
+    (v+ surface reflected)))
 
 (defun color-at (world ray)
   (let ((h (hit (intersect-world world ray))))
