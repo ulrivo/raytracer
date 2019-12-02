@@ -12,7 +12,9 @@
      #:+red+
      #:+white+
      #:+yellow+
+     #:color
      #:create-camera
+     #:m*
      #:make-checkers-pattern
      #:make-gradient-pattern
      #:make-light
@@ -23,6 +25,8 @@
      #:make-sphere
      #:make-stripe-pattern
      #:make-world
+     #:mlookat
+     #:point
      #:render
      #:rotation-x
      #:rotation-y
@@ -30,4 +34,5 @@
      #:save-canvas
      #:scaling
      #:translation
+     #:vectorr
      ))
