@@ -1,5 +1,47 @@
 (use-package :raytracer)
 
+(defun draw1 (width height)
+  (let* ((checkers (make-material
+                    :colour (color 1 0.1 0.1)
+                    :specular 0
+                    :reflective 0.1
+                    :pattern (make-checkers-pattern +black+ +white+)))
+         (floor (make-plane +identity-matrix+ checkers))
+         (right (make-plane
+                 (m* (rotation-y (/ pi 4))
+                     (rotation-x (/ pi 2)))
+                 checkers))
+         (left (make-plane
+                (m* (rotation-y (- (/ pi 4)))
+                     (rotation-x (/ pi 2)))
+                 checkers))
+         (right-s (make-sphere
+                   (m* (translation 1 2 -6)
+                       (scaling 0.6 0.6 0.6))
+                  (make-material
+                   :colour +blue+
+                   :diffuse 1
+                   :reflective 0
+                   :specular 0.9)))
+         (middle (make-sphere
+                  (translation -0.5 2 -5)
+                  (make-material
+                   :colour +orange+
+                   :diffuse 0.9
+                   :reflective 0.8
+                   :specular 0.1)))
+         (camera (create-camera  width height (/ pi 3)
+                                 (mlookat (point 0 3 -10)
+                                          (point 0 1 0)
+                                          (vectorr 0 1 0))))
+         (world (make-world
+                 :light (make-light
+                         :position (point -1 15 -20)
+                         :intensity (color 1 1 1))
+                 :shapes (list floor right left right-s middle)))
+         (canvas (render camera world)))
+    (save-canvas canvas "sphere1.png")))
+
 (defun draw (width height)
   (let* ((floor (make-plane
                  +identity-matrix+
