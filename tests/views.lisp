@@ -108,7 +108,7 @@
           (setf (material-ambient (shape-material shape)) 1)
           (let* ((i (make-intersektion :tt 1 :object shape))
                  (comps (prepare-computations i r))
-                 (color (reflected-color w comps)))
+                 (color (reflected-color w comps 4)))
             (equalp color +black+)))))
   (testing "the reflected color for a reflective material"
     (ok (let* ((w (default-world))
@@ -121,13 +121,13 @@
           (setf (world-shapes w) (cons shape (world-shapes w)))
           (let* ((i (make-intersektion :tt (sqrt 2) :object shape))
                  (comps (prepare-computations i r))
-                 (color (reflected-color w comps)))
+                 (color (reflected-color w comps 4)))
             (approximately color
                            (color 0.19032 0.2379 0.14274)))))))
 
 (deftest mutually-reflective
   (testing "color-at with mutually reflective surfaces"
-    (let* ((w (default-world))
+    (let* ((w (make-world))
            (lower (make-plane
                    (translation 0 -1 0)
                    (make-material
@@ -141,7 +141,5 @@
       (setf (world-light w) (make-light
                              :position (point 0 0 0)
                              :intensity (color 1 1 1)))
-      (setf (world-shapes w) (append
-                              (list lower upper)
-                              (world-shapes w)))
+      (setf (world-shapes w) (list lower upper))
       (ng (equalp +black+ (color-at w r))))))

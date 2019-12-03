@@ -52,9 +52,38 @@ and run tests with
 
 ### Debugging
 
+- Taken from [Debugging Lisp](https://malisper.me/category/debugging-common-lisp/) 
+
+#### Turn on debugging
+
 Turn off optimiztions to see all steps in (step (function....)):
 
-(declaim (optimize (speed 0) (space 0) (debug 3)))
+`(declaim (optimize (speed 0) (space 0) (debug 3)))`
+
+#### Recompilation and break
+
+- Insert dynamically `(break)`
+
+- Point to a frame and press 'r' to restart on frame
+
+#### Inspecting
+
+- Right click on object like `#<POINT {10031070F3}>`, or C-c C-v TAB
+
+- Use object like `(point-x #<POINT {10031070F3}>)`
+
+#### Slime Trace Dialog
+
+- Trace function with C-c M-t, and type the name of the function.
+
+- After execution, call Trace Dialog with C-c T.
+
+- "Fetch next batch"
+
+#### Redefining classes
+
+- `(find-class 'point)`
+- `Update-instance-for-redefined-class` to redefine a class dynamically
 
 ## Installation
  

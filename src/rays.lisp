@@ -126,16 +126,6 @@
          (world-shapes world))
         #'< :key #'intersektion-tt))
 
-(defun reflected-color (world comps)
-  (if (= 0 (material-reflective (shape-material (computations-object comps))))
-      +black+
-      (progn
-        (let* ((reflect-ray (make-ray :origin (computations-over-point comps)
-                                     :direction (computations-reflectv comps)))
-              (color (color-at world reflect-ray)))
-          (v* color
-              (material-reflective (shape-material
-                                    (computations-object comps))))))))
 
 (defun prepare-computations (intersektion ray)
   (let* ((tt (intersektion-tt intersektion))
@@ -164,20 +154,32 @@
          (h (hit is)))
     (and h (< (intersektion-tt h) distance))))
 
-(defun shade-hit (world comps)
+(defun reflected-color (world comps remaining)
+  (if (or (zerop remaining)
+          (zerop (material-reflective (shape-material (computations-object comps)))))
+      +black+
+      (progn
+        (let* ((reflect-ray (make-ray :origin (computations-over-point comps)
+                                      :direction (computations-reflectv comps)))
+               (color (color-at world reflect-ray (1- remaining))))
+          (v* color
+              (material-reflective (shape-material
+                                    (computations-object comps))))))))
+
+(defun shade-hit (world comps &optional (remaining 4))
   (let* ((shadowed (is-shadowed world (computations-over-point comps)))
          (surface (lighting (shape-material (computations-object comps))
                            (computations-object comps)
                            (world-light world)
-                           (computations-point comps)
+                           (computations-over-point comps)
                            (computations-eyev comps)
                            (computations-normalv comps)
                            shadowed))
-         (reflected (reflected-color world comps)))
+         (reflected (reflected-color world comps remaining)))
     (v+ surface reflected)))
 
-(defun color-at (world ray)
+(defun color-at (world ray &optional (remaining 4))
   (let ((h (hit (intersect-world world ray))))
     (if h
-        (shade-hit world (prepare-computations h ray))
+        (shade-hit world (prepare-computations h ray) remaining)
         (color 0 0 0))))
