@@ -60,6 +60,8 @@
   (specular 0.9)
   (shininess 200)
   (reflective 0.0)
+  (transparency 0.0)
+  (refractive-index 1.0)
   (pattern nil))
 
 (defclass shape ()
@@ -74,6 +76,13 @@
 
 (defun default-sphere () (make-instance 'sphere))
 
+(defun glass-sphere (&optional (transform +identity-matrix+)
+                       (refractive-index 1.5))
+  (make-instance 'sphere
+                 :transform transform
+                 :material (make-material
+                            :transparency 1.0
+                            :refractive-index refractive-index)))
 
 (defun make-sphere (transform material)
   (make-instance 'sphere
@@ -112,7 +121,7 @@
              (make-material)))))
 
 (defstruct computations
-  tt object point over-point eyev normalv inside reflectv)
+  tt object point over-point eyev normalv inside reflectv n1 n2)
 
 (defstruct camera
   hsize vsize field-of-view transform

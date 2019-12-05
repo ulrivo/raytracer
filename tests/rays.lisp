@@ -280,8 +280,28 @@
       (ok (< (vz (computations-over-point comps))
              (- (/ +epsilon+ 2))))
       (ok (> (vz (computations-point comps))
-             (vz (computations-over-point comps)))))))
+             (vz (computations-over-point comps))))))
 
+  (testing "Finding n1 and n2 at various intersections"
+    (let* ((a (glass-sphere (scaling 2 2 2) 1.5))
+           (b (glass-sphere (translation 0 0 -0.25) 2.0))
+           (c (glass-sphere (translation 0 0 0.25) 2.5))
+           (r (make-ray :origin (point 0 0 -4)
+                        :direction (vectorr 0 0 1)))
+           (xs (list
+                (make-intersektion :tt 2.0  :object a)
+                (make-intersektion :tt 2.75 :object b)
+                (make-intersektion :tt 3.25 :object c)
+                (make-intersektion :tt 4.75 :object b)
+                (make-intersektion :tt 5.25 :object c)
+                (make-intersektion :tt 6.0  :object a))))
+      (mapc (lambda (x n1 n2)
+              (let ((c (prepare-computations x r xs)))
+                (ok (= (computations-n1 c) n1))
+                (ok (= (computations-n2 c) n2))))
+            xs
+            '(1.0 1.5 2.0 2.5 2.5 1.5)
+            '(1.5 2.0 2.5 2.5 1.5 1.0)))))
 
 (deftest shade-hit
   (testing "shading an intersection"

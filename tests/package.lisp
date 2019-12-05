@@ -24,6 +24,8 @@
      #:color-at
      #:computations-eyev
      #:computations-inside
+     #:computations-n1
+     #:computations-n2
      #:computations-normalv
      #:computations-object
      #:computations-over-point
@@ -33,6 +35,7 @@
      #:default-plane
      #:default-sphere
      #:default-world
+     #:glass-sphere
      #:hit
      #:+identity-matrix+
      #:intersect

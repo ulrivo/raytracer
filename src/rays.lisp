@@ -127,14 +127,37 @@
         #'< :key #'intersektion-tt))
 
 
-(defun prepare-computations (intersektion ray)
+(defun prepare-computations (intersektion ray &optional (inters (list intersektion)))
   (let* ((tt (intersektion-tt intersektion))
          (object (intersektion-object intersektion))
          (point (ray-position ray tt))
          (eyev (v* (ray-direction ray) -1))
          (normalv (normal-at object point))
-         (inside (< (v. normalv eyev) 0)))
+         (inside (< (v. normalv eyev) 0))
+         n1 n2 containers)
     (when inside (setf normalv (v* normalv -1)))
+    ;; calculate n1 and n2 with the help of containers
+    (dolist (i inters)
+      (if (equalp i intersektion)
+          (setf n1
+                (if containers
+                    (material-refractive-index
+                     (shape-material
+                      (first containers)))
+                    1.0)))
+      (setf containers (if (member (intersektion-object i) containers :test #'equalp)
+                           (remove (intersektion-object i) containers :test #'equalp)
+                           (push (intersektion-object i) containers)))
+      (if (equalp i intersektion)
+          (progn
+            (setf n2
+                  (if containers
+                      (material-refractive-index
+                       (shape-material
+                        (first containers)))
+                      1.0))
+            (return))))
+    ;; answer a computations 
     (make-computations
      :tt tt
      :object object
@@ -143,7 +166,9 @@
      :eyev eyev
      :normalv normalv
      :inside inside
-     :reflectv (reflect (ray-direction ray) normalv))))
+     :reflectv (reflect (ray-direction ray) normalv)
+     :n1 n1
+     :n2 n2)))
 
 (defun is-shadowed (world point)
   (let* ((v (v- (light-position (world-light world)) point))
