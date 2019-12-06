@@ -301,7 +301,31 @@
                 (ok (= (computations-n2 c) n2))))
             xs
             '(1.0 1.5 2.0 2.5 2.5 1.5)
-            '(1.5 2.0 2.5 2.5 1.5 1.0)))))
+            '(1.5 2.0 2.5 2.5 1.5 1.0))))
+
+  (testing "The under point is offset below the surface"
+    (let* ((r (make-ray :origin (point 0 0 -5)
+                       :direction (vectorr 0 0 1)))
+          (shape (glass-sphere (translation 0 0 1)))
+          (i (make-intersektion :tt 5 :object shape))
+          (xs (list i))
+          (comps (prepare-computations i r xs)))
+      (ok (> (vz (computations-under-point comps))
+             (/ +epsilon+ 2)))
+      (ok (< (vz (computations-point comps))
+             (vz (computations-under-point comps)))))))
+
+(deftest refracted-color
+  (testing "The refracted color with an opaque surface"
+    (let* ((w (default-world))
+           (shape (first (world-shapes w)))
+           (r (make-ray :origin (point 0 0 -5)
+                        :direction (vectorr 0 0 1)))
+           (xs (list (make-intersektion :tt 4 :object shape)
+                     (make-intersektion :tt 6 :object shape)))
+           (comps (prepare-computations (first xs) r xs))
+           (c (refracted-color w comps 5)))
+      (ok (equalp c +black+)))))
 
 (deftest shade-hit
   (testing "shading an intersection"

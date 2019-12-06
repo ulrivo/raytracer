@@ -32,6 +32,7 @@
      #:computations-point
      #:computations-reflectv
      #:computations-tt
+     #:computations-under-point
      #:default-plane
      #:default-sphere
      #:default-world
@@ -70,6 +71,7 @@
      #:ray-position
      #:reflect
      #:reflected-color
+     #:refracted-color
      #:shade-hit
      #:shape-material
      #:transform

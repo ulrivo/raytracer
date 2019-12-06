@@ -121,7 +121,7 @@
              (make-material)))))
 
 (defstruct computations
-  tt object point over-point eyev normalv inside reflectv n1 n2)
+  tt object point over-point eyev normalv inside reflectv n1 n2 under-point)
 
 (defstruct camera
   hsize vsize field-of-view transform

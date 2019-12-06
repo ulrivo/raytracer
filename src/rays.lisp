@@ -138,31 +138,31 @@
     (when inside (setf normalv (v* normalv -1)))
     ;; calculate n1 and n2 with the help of containers
     (dolist (i inters)
-      (if (equalp i intersektion)
-          (setf n1
-                (if containers
-                    (material-refractive-index
-                     (shape-material
-                      (first containers)))
-                    1.0)))
+      (when (equalp i intersektion)
+        (setf n1
+              (if containers
+                  (material-refractive-index
+                   (shape-material
+                    (first containers)))
+                  1.0)))
       (setf containers (if (member (intersektion-object i) containers :test #'equalp)
                            (remove (intersektion-object i) containers :test #'equalp)
                            (push (intersektion-object i) containers)))
-      (if (equalp i intersektion)
-          (progn
-            (setf n2
-                  (if containers
-                      (material-refractive-index
-                       (shape-material
-                        (first containers)))
-                      1.0))
-            (return))))
+      (when (equalp i intersektion)
+        (setf n2
+              (if containers
+                  (material-refractive-index
+                   (shape-material
+                    (first containers)))
+                  1.0))
+        (return)))
     ;; answer a computations 
     (make-computations
      :tt tt
      :object object
      :point point
      :over-point (v+ point (v* normalv +epsilon+))
+     :under-point (v- point (v* normalv +epsilon+))
      :eyev eyev
      :normalv normalv
      :inside inside
@@ -179,17 +179,11 @@
          (h (hit is)))
     (and h (< (intersektion-tt h) distance))))
 
-(defun reflected-color (world comps remaining)
-  (if (or (zerop remaining)
-          (zerop (material-reflective (shape-material (computations-object comps)))))
+(defun refracted-color (world comps remaining)
+  "Answer the color thru transparent objects"
+  (if (zerop (material-transparency (computations-object comps)))
       +black+
-      (progn
-        (let* ((reflect-ray (make-ray :origin (computations-over-point comps)
-                                      :direction (computations-reflectv comps)))
-               (color (color-at world reflect-ray (1- remaining))))
-          (v* color
-              (material-reflective (shape-material
-                                    (computations-object comps))))))))
+      +white+))
 
 (defun shade-hit (world comps &optional (remaining 4))
   (let* ((shadowed (is-shadowed world (computations-over-point comps)))
