@@ -350,6 +350,32 @@
                             (make-intersektion :tt 6 :object shape)))
                   (comps (prepare-computations (first xs) r xs))
                   (c (refracted-color w comps 0)))
+             (ok (equalp c +black+))))
+  (testing "The refracted color under total internal reflection"
+           (let* ((w (make-world
+                      :light (make-light
+                              :position (point -10 10 -10)
+                              :intensity (color 1 1 1))
+                      :shapes (list
+                               (make-sphere
+                                +identity-matrix+
+                                (make-material
+                                 :colour (color 0.8 1.0 0.6)
+                                 :diffuse 0.7
+                                 :specular 0.2
+                                 :transparency 1.0
+                                 :refractive-index 1.5))
+                               (make-sphere
+                                (mscaling (vec 0.5 0.5 0.5))
+                                (make-material)))))
+                  (shape (first (world-shapes w)))
+                  (sqr (/ (sqrt 2) 2))
+                  (r (make-ray :origin (point 0 0 sqr)
+                               :direction (vectorr 0 1 0)))
+                  (xs (list (make-intersektion :tt (- sqr) :object shape)
+                            (make-intersektion :tt sqr :object shape)))
+                  (comps (prepare-computations (second xs) r xs))
+                  (c (refracted-color w comps 5)))
              (ok (equalp c +black+)))))
 
 (deftest shade-hit

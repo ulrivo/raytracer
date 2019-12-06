@@ -197,7 +197,12 @@
            (material-transparency
             (shape-material
              (computations-object comps))))
-          (zerop remaining))
+          (zerop remaining)
+          ;; total internal relection by Snell's law
+          (let* ((n-ratio (/ (computations-n1 comps) (computations-n2 comps)))
+                 (cos-i (v. (computations-eyev comps) (computations-normalv comps)))
+                 (sin2-t (* (expt n-ratio 2) (- 1 (expt cos-i 2)))))
+            (> sin2-t 1)))
       +black+
       +white+))
 
