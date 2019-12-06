@@ -179,9 +179,22 @@
          (h (hit is)))
     (and h (< (intersektion-tt h) distance))))
 
+(defun reflected-color (world comps remaining)
+  (if (or (zerop remaining)
+          (zerop (material-reflective (shape-material (computations-object comps)))))
+      +black+
+      (progn
+        (let* ((reflect-ray (make-ray :origin (computations-over-point comps)
+                                      :direction (computations-reflectv comps)))
+               (color (color-at world reflect-ray (1- remaining))))
+          (v* color
+              (material-reflective (shape-material
+                                    (computations-object comps))))))))
+
 (defun refracted-color (world comps remaining)
   "Answer the color thru transparent objects"
-  (if (zerop (material-transparency (computations-object comps)))
+  (if (zerop (material-transparency (shape-material
+                                     (computations-object comps))))
       +black+
       +white+))
 
