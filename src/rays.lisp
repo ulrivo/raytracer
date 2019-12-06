@@ -193,8 +193,11 @@
 
 (defun refracted-color (world comps remaining)
   "Answer the color thru transparent objects"
-  (if (zerop (material-transparency (shape-material
-                                     (computations-object comps))))
+  (if (or (zerop
+           (material-transparency
+            (shape-material
+             (computations-object comps))))
+          (zerop remaining))
       +black+
       +white+))
 

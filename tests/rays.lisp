@@ -316,16 +316,41 @@
              (vz (computations-under-point comps)))))))
 
 (deftest refracted-color
-  (testing "The refracted color with an opaque surface"
-    (let* ((w (default-world))
-           (shape (first (world-shapes w)))
-           (r (make-ray :origin (point 0 0 -5)
-                        :direction (vectorr 0 0 1)))
-           (xs (list (make-intersektion :tt 4 :object shape)
-                     (make-intersektion :tt 6 :object shape)))
-           (comps (prepare-computations (first xs) r xs))
-           (c (refracted-color w comps 5)))
-      (ok (equalp c +black+)))))
+    (testing "The refracted color with an opaque surface"
+             (let* ((w (default-world))
+                    (shape (first (world-shapes w)))
+                    (r (make-ray :origin (point 0 0 -5)
+                                 :direction (vectorr 0 0 1)))
+                    (xs (list (make-intersektion :tt 4 :object shape)
+                              (make-intersektion :tt 6 :object shape)))
+                    (comps (prepare-computations (first xs) r xs))
+                    (c (refracted-color w comps 5)))
+               (ok (equalp c +black+))))
+  (testing "The refracted color at the maximum recursive depth"
+           (let* ((w (make-world
+                      :light (make-light
+                              :position (point -10 10 -10)
+                              :intensity (color 1 1 1))
+                      :shapes (list
+                               (make-sphere
+                                +identity-matrix+
+                                (make-material
+                                 :colour (color 0.8 1.0 0.6)
+                                 :diffuse 0.7
+                                 :specular 0.2
+                                 :transparency 1.0
+                                 :refractive-index 1.5))
+                               (make-sphere
+                                (mscaling (vec 0.5 0.5 0.5))
+                                (make-material)))))
+                  (shape (first (world-shapes w)))
+                  (r (make-ray :origin (point 0 0 -5)
+                               :direction (vectorr 0 0 1)))
+                  (xs (list (make-intersektion :tt 4 :object shape)
+                            (make-intersektion :tt 6 :object shape)))
+                  (comps (prepare-computations (first xs) r xs))
+                  (c (refracted-color w comps 0)))
+             (ok (equalp c +black+)))))
 
 (deftest shade-hit
   (testing "shading an intersection"
