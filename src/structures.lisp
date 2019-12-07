@@ -24,10 +24,14 @@
            :initarg :color2
            :initform +white+)))
 
+(defclass test-pattern (pattern) ())
 (defclass stripe-pattern (pattern) ())
 (defclass gradient-pattern (pattern) ())
 (defclass ring-pattern (pattern) ())
 (defclass checkers-pattern (pattern) ())
+
+(defun make-test-pattern ()
+  (make-instance 'test-pattern))
 
 (defun make-stripe-pattern (color1 color2 &optional (transform +identity-matrix+))
   (make-instance 'stripe-pattern
@@ -84,7 +88,7 @@
                             :transparency 1.0
                             :refractive-index refractive-index)))
 
-(defun make-sphere (transform material)
+(defun make-sphere (transform &optional (material (make-material)))
   (make-instance 'sphere
                  :transform transform
                  :material material))

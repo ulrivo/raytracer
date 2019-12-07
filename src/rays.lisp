@@ -65,6 +65,11 @@
 (defun reflect (in normal)
   (v- in (v* normal (* 2 (v. in normal)))))
 
+(defmethod pattern-at ((pattern test-pattern) point)
+  (color (vx point)
+         (vy point)
+         (vz point)))
+
 (defmethod pattern-at ((pattern stripe-pattern) point)
     (if (evenp (floor (vx point)))
         (pattern-color1 pattern)

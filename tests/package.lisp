@@ -53,6 +53,7 @@
      #:make-ring-pattern
      #:make-sphere
      #:make-stripe-pattern
+     #:make-test-pattern
      #:make-world
      #:material-ambient
      #:material-colour
@@ -62,6 +63,7 @@
      #:material-specular
      #:normal-at
      #:pattern-at
+     #:pattern-at-shape
      #:pixel-at
      #:point
      #:prepare-computations
