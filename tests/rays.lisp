@@ -176,17 +176,13 @@
                  (approximately r (vectorr 1 0 0))))))
 
 (deftest test-pattern
-    (let ((pattern (make-test-pattern)))
-      (testing "A pattern with an object transformation"
-        (let* ((shape (make-sphere
-                       (scaling 2 2 2)
-                       (make-material)))
-               (c (pattern-at-shape pattern shape (point 2 3 4))))
-          (ok (equalp c (color 1 1.5 2))))))
-      (testing "A pattern with an pattern transformation"
-               (let* ((shape (make-sphere))
-                      (c (pattern-at-shape pattern shape (point 2 3 4))))
-                 (ok (equalp c (color 1 1.5 2)))))))
+  (let ((pattern (make-test-pattern)))
+    (testing "A pattern with an object transformation"
+      (let* ((shape (make-sphere
+                     (scaling 2 2 2)
+                     (make-material)))
+             (c (pattern-at-shape pattern shape (point 2 3 4))))
+        (ok (equalp c (color 1 1.5 2)))))))
 
 (deftest pattern
   (testing "A gradient linearly interpolates between colors"
@@ -391,31 +387,33 @@
                   (c (refracted-color w comps 5)))
              (ok (equalp c +black+))))
   (testing "The refracted color with a refracted ray"
-           (let* ((w (make-world
+    (let* ((a (make-sphere
+               +identity-matrix+
+               (make-material
+                :colour (color 0.8 1.0 0.6)
+                :diffuse 0.7
+                :specular 0.2
+                :ambient 1.0
+                :pattern (make-test-pattern))))
+           (b (make-sphere
+               (mscaling (vec 0.5 0.5 0.5))
+               (make-material
+                :transparency 1.0
+                :refractive-index 1.5)))
+           (w (make-world
                       :light (make-light
                               :position (point -10 10 -10)
                               :intensity (color 1 1 1))
-                      :shapes (list
-                               (make-sphere
-                                +identity-matrix+
-                                (make-material
-                                 :colour (color 0.8 1.0 0.6)
-                                 :diffuse 0.7
-                                 :specular 0.2
-                                 :transparency 1.0
-                                 :refractive-index 1.5))
-                               (make-sphere
-                                (mscaling (vec 0.5 0.5 0.5))
-                                (make-material)))))
-                  (shape (first (world-shapes w)))
-                  (sqr (/ (sqrt 2) 2))
-                  (r (make-ray :origin (point 0 0 sqr)
+                      :shapes (list a b)))
+                  (r (make-ray :origin (point 0 0 0.1)
                                :direction (vectorr 0 1 0)))
-                  (xs (list (make-intersektion :tt (- sqr) :object shape)
-                            (make-intersektion :tt sqr :object shape)))
-                  (comps (prepare-computations (second xs) r xs))
+                  (xs (list (make-intersektion :tt -0.9899 :object a)
+                            (make-intersektion :tt -0.4899 :object b)
+                            (make-intersektion :tt  0.4899 :object b)
+                            (make-intersektion :tt  0.9899 :object a)))
+                  (comps (prepare-computations (third xs) r xs))
                   (c (refracted-color w comps 5)))
-             (ok (equalp c +black+)))))
+      (ok (approximately  c (color 0 0.99888 0.04725))))))
 
 (deftest shade-hit
   (testing "shading an intersection"

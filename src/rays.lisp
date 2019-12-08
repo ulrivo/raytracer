@@ -202,14 +202,22 @@
            (material-transparency
             (shape-material
              (computations-object comps))))
-          (zerop remaining)
-          ;; total internal relection by Snell's law
-          (let* ((n-ratio (/ (computations-n1 comps) (computations-n2 comps)))
-                 (cos-i (v. (computations-eyev comps) (computations-normalv comps)))
-                 (sin2-t (* (expt n-ratio 2) (- 1 (expt cos-i 2)))))
-            (> sin2-t 1)))
+          (zerop remaining))
       +black+
-      +white+))
+      ;; total internal relection by Snell's law
+      (let* ((n-ratio (/ (computations-n1 comps) (computations-n2 comps)))
+             (cos-i (v. (computations-eyev comps) (computations-normalv comps)))
+             (sin2-t (* (expt n-ratio 2) (- 1 (expt cos-i 2)))))
+        (if (> sin2-t 1)
+            +black+
+            (let* ((cos-t (sqrt (- 1.0 sin2-t)))
+                   (direction (v- (v* (computations-normalv comps)
+                                      (- (* n-ratio cos-i) cos-t))
+                                  (v* (computations-eyev comps) n-ratio)))
+                   (refract-ray (make-ray :origin (computations-under-point comps)
+                                          :direction direction)))
+              (v* (color-at world refract-ray (decf remaining))
+                 (material-transparency (shape-material (computations-object comps)))))))))
 
 (defun shade-hit (world comps &optional (remaining 4))
   (let* ((shadowed (is-shadowed world (computations-over-point comps)))

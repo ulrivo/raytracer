@@ -88,7 +88,7 @@
                             :transparency 1.0
                             :refractive-index refractive-index)))
 
-(defun make-sphere (transform &optional (material (make-material)))
+(defun make-sphere (&optional (transform +identity-matrix+) (material (make-material)))
   (make-instance 'sphere
                  :transform transform
                  :material material))
