@@ -464,12 +464,34 @@
                (shape (make-plane
                        (translation 0 -1 0)
                        (make-material :reflective 0.5))))
-          (setf (world-shapes w) (cons shape (world-shapes w)))
+          (push shape (world-shapes w))
           (let* ((i (make-intersektion :tt (sqrt 2) :object shape))
                  (comps (prepare-computations i r))
                  (color (shade-hit w comps)))
             (approximately color
-                           (color 0.87677 0.92436 0.82918)))))))
+                           (color 0.87677 0.92436 0.82918))))))
+
+  (testing "shade_hit() with a transparent material"
+           (let* ((w (default-world))
+                  (floor (make-plane
+                           (translation 0 -1 0)
+                           (make-material
+                            :transparency 0.5
+                            :refractive-index 1.5)))
+                  (ball (make-sphere
+                         (translation 0 -3.5 -0.5)
+                         (make-material
+                          :colour (color 1 0 0)
+                          :ambient 0.5)))
+                  (sqr (/ (sqrt 2) 2))
+                  (r (make-ray :origin (point 0 0 -3)
+                                 :direction (vectorr 0 (- sqr) sqr)))
+                  (xs (list (make-intersektion :tt (sqrt 2) :object floor)))
+                  (comps (prepare-computations (first xs) r xs)))
+             (push floor (world-shapes w))
+             (push ball (world-shapes w))
+             (ok (approximately (color 0.93642 0.68542 0.68642)
+                                (shade-hit w comps 5))))))
 
 (deftest color-at
   (testing "the color when a ray misses"
@@ -507,3 +529,29 @@
             (equalp (color 0.1 0.1 0.1)
                     (lighting m (default-sphere) light (point 0 0 0)
                               eyev normalv in-shadow))))))
+
+(deftest schlick
+    (testing "The Schlick approximation under total internal reflection"
+             (let* ((shape (glass-sphere))
+                    (sqr (/ (sqrt 2) 2))
+                    (r (make-ray :origin (point 0 0 sqr)
+                                 :direction (vectorr 0 1 0)))
+                    (xs (list (make-intersektion :tt (- sqr) :object shape)
+                              (make-intersektion :tt sqr :object shape)))
+                    (comps (prepare-computations (second xs) r xs)))
+               (ok (= (schlick comps) 1))))
+  (testing "The Schlick approximation with a perpendicular viewing angle"
+           (let* ((shape (glass-sphere))
+                  (r (make-ray :origin (point 0 0 0)
+                               :direction (vectorr 0 1 0)))
+                  (xs (list (make-intersektion :tt -1 :object shape)
+                            (make-intersektion :tt 1 :object shape)))
+                  (comps (prepare-computations (second xs) r xs)))
+             (ok (approximately (schlick comps) 0.04))))
+  (testing "The Schlick approximation with small angle and n2 > n1"
+             (let* ((shape (glass-sphere))
+                    (r (make-ray :origin (point 0 0.99 -2)
+                                 :direction (vectorr 0 0 1)))
+                    (xs (list (make-intersektion :tt 1.8589 :object shape)))
+                    (comps (prepare-computations (first xs) r xs)))
+               (ok (approximately (schlick comps) 0.48873)))))

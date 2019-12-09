@@ -74,6 +74,7 @@
      #:reflect
      #:reflected-color
      #:refracted-color
+     #:schlick
      #:shade-hit
      #:shape-material
      #:transform

@@ -219,7 +219,7 @@
               (v* (color-at world refract-ray (decf remaining))
                  (material-transparency (shape-material (computations-object comps)))))))))
 
-(defun shade-hit (world comps &optional (remaining 4))
+(defun shade-hit (world comps &optional (remaining 5))
   (let* ((shadowed (is-shadowed world (computations-over-point comps)))
          (surface (lighting (shape-material (computations-object comps))
                            (computations-object comps)
@@ -231,8 +231,20 @@
          (reflected (reflected-color world comps remaining)))
     (v+ surface reflected)))
 
-(defun color-at (world ray &optional (remaining 4))
+(defun color-at (world ray &optional (remaining 5))
   (let ((h (hit (intersect-world world ray))))
     (if h
         (shade-hit world (prepare-computations h ray) remaining)
         (color 0 0 0))))
+
+(defun schlick (comps)
+  (let* ((cos (v. (computations-eyev comps) (computations-normalv comps))))
+    (if (> (computations-n1 comps) (computations-n2 comps))
+        (let* ((n (/ (computations-n1 comps) (computations-n2 comps)))
+               (sin2-t (* (expt n 2) (- 1.0 (expt cos 2)))))
+          (when (> sin2-t 1.0) (return-from schlick 1.0))
+          (setf cos (sqrt (- 1.0 sin2-t)))))
+    (let ((r0 (expt (/ (- (computations-n1 comps) (computations-n2 comps))
+                       (+ (computations-n1 comps) (computations-n2 comps)))
+                    2)))
+      (+ r0 (* (- 1 r0) (expt (- 1 cos) 5))))))
