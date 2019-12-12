@@ -28,7 +28,9 @@
                   (make-material
                    :colour +orange+
                    :diffuse 0.9
-                   :reflective 0.8
+                   :reflective 0.5
+                   :transparency 0.5
+                   :refractive-index 1.5
                    :specular 0.1)))
          (camera (create-camera  width height (/ pi 3)
                                  (mlookat (point 0 3 -10)
