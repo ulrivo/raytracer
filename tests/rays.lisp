@@ -490,7 +490,7 @@
                   (comps (prepare-computations (first xs) r xs)))
              (push floor (world-shapes w))
              (push ball (world-shapes w))
-             (ok (approximately (color 0.93642 0.68542 0.68642)
+             (ok (approximately (color 0.9364251 0.6864251 0.6864251)
                                 (shade-hit w comps 5))))))
 
 (deftest color-at
