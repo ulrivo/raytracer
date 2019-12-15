@@ -490,7 +490,30 @@
                   (comps (prepare-computations (first xs) r xs)))
              (push floor (world-shapes w))
              (push ball (world-shapes w))
-             (ok (approximately (color 0.9364251 0.6864251 0.6864251)
+             (ok (approximately (color 0.93642 0.68642 0.68642 )
+                                (shade-hit w comps 5)))))
+
+  (testing "shade_hit() with a reflective transparent material"
+           (let* ((w (default-world))
+                  (floor (make-plane
+                           (translation 0 -1 0)
+                           (make-material
+                            :transparency 0.5
+                            :reflective 0.5
+                            :refractive-index 1.5)))
+                  (ball (make-sphere
+                         (translation 0 -3.5 -0.5)
+                         (make-material
+                          :colour (color 1 0 0)
+                          :ambient 0.5)))
+                  (sqr (/ (sqrt 2) 2))
+                  (r (make-ray :origin (point 0 0 -3)
+                                 :direction (vectorr 0 (- sqr) sqr)))
+                  (xs (list (make-intersektion :tt (sqrt 2) :object floor)))
+                  (comps (prepare-computations (first xs) r xs)))
+             (push floor (world-shapes w))
+             (push ball (world-shapes w))
+             (ok (approximately (color 0.93391 0.69643 0.69243)
                                 (shade-hit w comps 5))))))
 
 (deftest color-at
