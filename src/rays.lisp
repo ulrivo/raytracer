@@ -152,7 +152,7 @@
                   1.0)))
       (setf containers (if (member (intersektion-object i) containers :test #'equalp)
                            (remove (intersektion-object i) containers :test #'equalp)
-                           (push (intersektion-object i) containers)))
+                           (cons (intersektion-object i) containers)))
       (when (equalp i intersektion)
         (setf n2
               (if containers
@@ -188,13 +188,12 @@
   (if (or (zerop remaining)
           (zerop (material-reflective (shape-material (computations-object comps)))))
       +black+
-      (progn
-        (let* ((reflect-ray (make-ray :origin (computations-over-point comps)
-                                      :direction (computations-reflectv comps)))
-               (color (color-at world reflect-ray (1- remaining))))
-          (v* color
-              (material-reflective (shape-material
-                                    (computations-object comps))))))))
+      (let* ((reflect-ray (make-ray :origin (computations-over-point comps)
+                                    :direction (computations-reflectv comps)))
+             (color (color-at world reflect-ray (1- remaining))))
+        (v* color
+            (material-reflective (shape-material
+                                  (computations-object comps)))))))
 
 (defun refracted-color (world comps remaining)
   "Answer the color thru transparent objects"
