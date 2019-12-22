@@ -1,5 +1,29 @@
 (use-package :raytracer)
 
+(defun draw2 (width height)
+  (let* ((floor (make-plane
+                 (translation 0 -1 0)
+                 (make-material
+                  :transparency 0.5
+                  :reflective 0.5
+                  :refractive-index 1.5)))
+         (ball (make-sphere
+                (translation 0 -3.5 -0.5)
+                (make-material
+                 :colour (color 1 0 0)
+                 :ambient 0.5)))
+         (camera (create-camera  width height (/ pi 3)
+                                 (mlookat (point 0 -3 -1)
+                                          (point 0 1 0)
+                                          (vectorr 0 1 0))))
+         (world (make-world
+                 :light (make-light
+                         :position (point -10 10 -10)
+                         :intensity (color 1 1 1))
+                 :shapes (list floor ball)))
+         (canvas (render camera world)))
+    (save-canvas canvas "~/dev/lisp/src/raytracer/sphere2.png")))
+
 (defun draw1 (width height)
   (let* ((checkers (make-material
                     :colour (color 1 0.1 0.1)
@@ -33,7 +57,7 @@
                    :reflective 0.5
                    :transparency 0.5
                    :specular 0.1)))
-         (front (glass-sphere (translation -0.5 1 2)))
+         (front (glass-sphere (translation 0.5 2 2)))
          (camera (create-camera  width height (/ pi 3)
                                  (mlookat (point 0 3 -10)
                                           (point 0 1 0)

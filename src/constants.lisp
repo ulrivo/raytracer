@@ -1,6 +1,6 @@
 (in-package :raytracer)
 
-(defvar +epsilon+ 0.00001)
+(defvar +epsilon+ 0.0001)
 
 (defvar +white+ (vec 1. 1. 1. ))
 (defvar +black+ (vec 0. 0. 0. ))

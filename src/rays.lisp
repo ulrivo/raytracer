@@ -216,7 +216,7 @@
                                   (v* (computations-eyev comps) n-ratio)))
                    (refract-ray (make-ray :origin (computations-under-point comps)
                                           :direction direction)))
-              (v* (color-at world refract-ray (decf remaining))
+              (v* (color-at world refract-ray (1- remaining))
                  (material-transparency (shape-material (computations-object comps)))))))))
 
 (defun schlick (comps)
