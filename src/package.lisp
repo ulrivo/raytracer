@@ -25,7 +25,6 @@
      #:make-sphere
      #:make-stripe-pattern
      #:make-world
-     #:mlookat
      #:point
      #:render
      #:rotation-x

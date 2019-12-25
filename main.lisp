@@ -68,7 +68,7 @@
                    :specular 0.1)))
          (front (glass-sphere (translation 0.5 2 2)))
          (camera (create-camera  width height (/ pi 3)
-                                 (mlookat (point 0 3 -10)
+                                 (view-transform (point 0 3 -10)
                                           (point 0 1 0)
                                           (vectorr 0 1 0))))
          (world (make-world
@@ -119,7 +119,7 @@
                  :pattern (make-stripe-pattern +lime+ +green+)
                  :specular 0.3)))
          (camera (create-camera  width height (/ pi 3)
-                                 (mlookat (point 0 1.5 -5)
+                                 (view-transform (point 0 1.5 -5)
                                                  (point 0 1 0)
                                                  (vectorr 0 1 0))))
          (world (make-world
