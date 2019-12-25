@@ -35,4 +35,5 @@
      #:scaling
      #:translation
      #:vectorr
+     #:view-transform
      ))

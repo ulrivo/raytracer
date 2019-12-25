@@ -22,7 +22,7 @@
                  :transparency 1.0
                  :refractive-index 1.52)))
          (camera (create-camera  width height (/ pi 3)
-                                 (mlookat (point 0 2 -10)
+                                 (view-transform (point 0 2 -10)
                                           (point 0 1 0)
                                           (vectorr 0 1 0))))
          (world (make-world

@@ -21,6 +21,32 @@
                     (ray-position ray 2.5)
                     (point 4.5 3 4))))))
 
+(deftest view-transform
+    (testing "The transformation matrix for the default orientation"
+             (ok (equalp +identity-matrix+
+                         (view-transform (point 0 0 0)
+                                         (point 0 0 -1)
+                                         (vectorr 0 1 0)))))
+  (testing "A view transformation matrix looking in positive z direction"
+           (ok (equalp (scaling -1 1 -1)
+                       (view-transform (point 0 0 0)
+                                       (point 0 0 1)
+                                       (vectorr 0 1 0)))))
+  (testing "A view transformation matrix looking in positive z direction"
+           (ok (equalp (translation 0 0 -8)
+                       (view-transform (point 0 0 8)
+                                       (point 0 0 0)
+                                       (vectorr 0 1 0)))))
+  (testing "An arbitrary view transformation"
+           (ok (approximately (mat
+                        -0.50709  0.50709   0.67612  -2.36643
+                        0.76772  0.60609   0.12122  -2.82843
+                        -0.35857  0.59761  -0.71714   0.00000
+                        0.00000  0.00000   0.00000   1.00000)
+                       (view-transform (point 1 3 2)
+                                       (point 4 -2 8)
+                                       (vectorr 1 1 0))))))
+
 (deftest intersect
     (testing "intersection of sphere and ray"
              (let* ((r (make-ray :origin (point 0 0 -5) :direction (vectorr 0 0 1)))
@@ -299,7 +325,7 @@
                         :direction (vectorr 0 0 1)))
            (xs (mapcar (lambda (x y)
                          (make-intersektion :tt x :object y))
-                       '(2.0 2.75 3.25 4.75 5.25)
+                       '(2.0 2.75 3.25 4.75 5.25 6.0)
                        (list a b c b c a))))
       (mapc (lambda (x n1 n2)
               (let ((c (prepare-computations x r xs)))

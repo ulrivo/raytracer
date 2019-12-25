@@ -8,6 +8,22 @@
    :origin    (m* matrix (ray-origin ray))
    :direction (m* matrix (ray-direction ray))))
 
+(defun view-transform (from to up)
+  (let* ((forward (nvunit (v- to from)))
+         (upn (nvunit up))
+         (forward3 (vec3 (vx forward) (vy forward) (vz forward)))
+         (upn3 (vec3 (vx upn) (vy upn) (vz upn)))
+         (left (vc forward3 upn3))
+         (true-up (vc left forward3))
+         (nforward (v* forward3 -1))
+         (nfrom (v* from -1))
+         (orientation (mat
+                       (vx left) (vy left) (vz left) 0
+                       (vx true-up) (vy true-up) (vz true-up) 0
+                       (vx nforward) (vy nforward) (vz nforward) 0
+                       0 0 0 1)))
+    (m* orientation (translation (vx nfrom) (vy nfrom) (vz nfrom)))))
+
 ;; answers an intersektion, for all shapes first convert ray into object space
 
 (defmethod local-intersect ((s sphere) ray)
@@ -206,7 +222,7 @@
       ;; total internal relection by Snell's law
       (let* ((n-ratio (/ (computations-n1 comps) (computations-n2 comps)))
              (cos-i (v. (computations-eyev comps) (computations-normalv comps)))
-             (sin2-t (* (* n-ratio n-ratio) (- 1 (* cos-i cos-i)))))
+             (sin2-t (* n-ratio n-ratio (- 1 (* cos-i cos-i)))))
         (if (> sin2-t 1)
             +black+
             (let* ((cos-t (sqrt (- 1.0 sin2-t)))
