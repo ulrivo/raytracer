@@ -150,8 +150,8 @@
                    (shape-material
                     (first containers)))
                   1.0)))
-      (setf containers (if (member (intersektion-object i) containers :test #'equalp)
-                           (remove (intersektion-object i) containers :test #'equalp)
+      (setf containers (if (member (intersektion-object i) containers)
+                           (remove (intersektion-object i) containers)
                            (cons (intersektion-object i) containers)))
       (when (equalp i intersektion)
         (setf n2
@@ -161,7 +161,7 @@
                     (first containers)))
                   1.0))
         (return)))
-    ;; answer a computations 
+    ;; answer a computations
     (make-computations
      :tt tt
      :object object
@@ -206,7 +206,7 @@
       ;; total internal relection by Snell's law
       (let* ((n-ratio (/ (computations-n1 comps) (computations-n2 comps)))
              (cos-i (v. (computations-eyev comps) (computations-normalv comps)))
-             (sin2-t (* (expt n-ratio 2) (- 1 (expt cos-i 2)))))
+             (sin2-t (* (* n-ratio n-ratio) (- 1 (* cos-i cos-i)))))
         (if (> sin2-t 1)
             +black+
             (let* ((cos-t (sqrt (- 1.0 sin2-t)))
@@ -216,24 +216,26 @@
                    (refract-ray (make-ray :origin (computations-under-point comps)
                                           :direction direction)))
               (v* (color-at world refract-ray (1- remaining))
-                 (material-transparency (shape-material (computations-object comps)))))))))
+                  (material-transparency (shape-material (computations-object comps)))))))))
 
 (defun schlick (comps)
   (flet ((r-expr (cos)
-           (let ((r0 (expt (/ (- (computations-n1 comps) (computations-n2 comps))
+           (let* ((r0 (expt (/ (- (computations-n1 comps) (computations-n2 comps))
                               (+ (computations-n1 comps) (computations-n2 comps)))
-                           2)))
-             (+ r0 (* (- 1 r0) (expt (- 1 cos) 5))))))
+                           2))
+                 (cos1 (- 1 cos))
+                 (cos2 (* cos1 cos1)))
+             (+ r0 (* (- 1 r0) cos2 cos2 cos1)))))
     (let* ((cos (v. (computations-eyev comps) (computations-normalv comps))))
       (if (> (computations-n1 comps) (computations-n2 comps))
           (let* ((n (/ (computations-n1 comps) (computations-n2 comps)))
-                 (sin2-t (* (expt n 2) (- 1.0 (expt cos 2)))))
+                 (sin2-t (* (* n n) (- 1.0 (* cos cos)))))
             (if (> sin2-t 1.0)
                 1.0
                 (r-expr (sqrt (- 1.0 sin2-t)))))
           (r-expr cos)))))
 
-(defun shade-hit (world comps &optional (remaining 5))
+(defun shade-hit (world comps &optional (remaining 4))
   (let* ((shadowed (is-shadowed world (computations-over-point comps)))
          (surface (lighting (shape-material (computations-object comps))
                             (computations-object comps)
@@ -248,11 +250,12 @@
     (if (and (> (material-reflective material) 0.0)
              (> (material-transparency material) 0.0))
         (let ((reflectance (schlick comps)))
-          (v+ surface (v* reflected reflectance)
+          (v+ surface
+              (v* reflected reflectance)
               (v* refracted (- 1.0 reflectance))))
         (v+ surface reflected refracted))))
 
-(defun color-at (world ray &optional (remaining 5))
+(defun color-at (world ray &optional (remaining 4))
   (let ((h (hit (intersect-world world ray))))
     (if h
         (shade-hit world (prepare-computations h ray) remaining)
