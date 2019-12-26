@@ -4,32 +4,55 @@
   (let* ((checkers (make-material
                     :colour (color 1 0.1 0.1)
                     :specular 0
-;;                    :reflective 0.3
+                    :reflective 0.05
                     :pattern (make-checkers-pattern +black+ +white+)))
          (floor (make-plane +identity-matrix+ checkers))
+         (left-wall (make-plane (m* (translation 0 0 30)
+                                    (rotation-y (/ pi 4))
+                                    (rotation-x (/ pi 2)))
+                                checkers))
+         (right-wall (make-plane (m* (translation 0 0 30)
+                                     (rotation-y (* 3 (/ pi 4)))
+                                    (rotation-x (/ pi 2)))
+                                checkers))
+         (red-ball (make-sphere
+                     (m* 
+                      (translation -5 1 20)
+                      (scaling 1 1 1))
+                     (make-material
+                      :colour +red+
+                      :shininess 300
+                      :reflective 0.0)))
          (blue-ball (make-sphere
                      (m* 
-                      (translation 2 2 4)
+                      (translation 1.5 2 20)
                       (scaling 2 2 2))
                      (make-material
-                      :colour +green+
+                      :colour +blue+
                       :reflective 0.0)))
-         (red-ball (make-sphere
+         (glass-ball (make-sphere
                 (m*
-                 (translation 0 1.5 0)
-                 (scaling 1.5 1.5 1.5))
+                 (translation 0 3.5 0)
+                 (scaling 3 3 3))
                 (make-material
                  :transparency 1.0
-                 :refractive-index 1.52)))
+                 :refractive-index 3)))
          (camera (create-camera  width height (/ pi 3)
-                                 (view-transform (point 0 2 -10)
-                                          (point 0 1 0)
+                                 (view-transform
+                                          (point 1 3 -14)
+                                          (point 0 3.5 0)
                                           (vectorr 0 1 0))))
          (world (make-world
                  :light (make-light
                          :position (point -10 10 -10)
-                         :intensity (color 1 1 1))
-                 :shapes (list floor blue-ball red-ball)))
+                         :intensity (color 0.5 0.5 0.5))
+                 :shapes (list
+                          floor
+                          left-wall
+                          right-wall
+                          blue-ball
+                          red-ball
+                          glass-ball)))
          (canvas (render camera world)))
     (save-canvas canvas "~/dev/lisp/src/raytracer/sphere2.png")))
 
