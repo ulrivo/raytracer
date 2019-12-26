@@ -4,7 +4,7 @@
   (let* ((checkers (make-material
                     :colour (color 1 0.1 0.1)
                     :specular 0
-                    :reflective 0.05
+                    :reflective 0
                     :pattern (make-checkers-pattern +black+ +white+)))
          (floor (make-plane +identity-matrix+ checkers))
          (left-wall (make-plane (m* (translation 0 0 30)
@@ -17,7 +17,7 @@
                                 checkers))
          (red-ball (make-sphere
                      (m* 
-                      (translation -5 1 20)
+                      (translation -5 1 10)
                       (scaling 1 1 1))
                      (make-material
                       :colour +red+
@@ -25,7 +25,7 @@
                       :reflective 0.0)))
          (blue-ball (make-sphere
                      (m* 
-                      (translation 1.5 2 20)
+                      (translation 1.5 2 15)
                       (scaling 2 2 2))
                      (make-material
                       :colour +blue+
@@ -36,7 +36,8 @@
                  (scaling 3 3 3))
                 (make-material
                  :transparency 1.0
-                 :refractive-index 3)))
+                 :reflective 0.1
+                 :refractive-index 2.9)))
          (camera (create-camera  width height (/ pi 3)
                                  (view-transform
                                           (point 1 3 -14)
