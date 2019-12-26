@@ -14,6 +14,7 @@
      #:+yellow+
      #:color
      #:create-camera
+     #:glass-sphere
      #:m*
      #:make-checkers-pattern
      #:make-gradient-pattern
