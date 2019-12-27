@@ -72,9 +72,21 @@ Turn off optimiztions to see all steps in (step (function....)):
 
 - Use object like `(point-x #<POINT {10031070F3}>)`
 
+- SPC mgg to edit defintion at point
+
+- M-, to return to last point
+
+- M-n, and M-p to jump thru notes of compile warnings
+
+- ,h < who calls
+
+- ,hH Hyperspec of function at point  
+
 #### Slime Trace Dialog
 
-- Trace function with C-c M-t, and type the name of the function.
+- Trace function with C-c C-t, while on the function name.
+
+- C-c, C-t to untrace.
 
 - After execution, call Trace Dialog with C-c T.
 
