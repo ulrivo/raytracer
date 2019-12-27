@@ -1,5 +1,0 @@
-* Raytracer 
-
-** Usage
-
-** Installation

@@ -11,7 +11,8 @@
                  (:file "constants")
                  (:file "structures")
                  (:file "utils")
-                 (:file "rays"))))
+                 (:file "rays")
+                 (:file "macros"))))
   :description "Raytracer by Jamis Buck"
   :in-order-to ((test-op (test-op "raytracer/tests"))))
 
