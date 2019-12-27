@@ -5,31 +5,34 @@
     (ok (let* ((from (point 0 0 0))
                (to (point 0 0 -1))
                (up (vectorr 0 1 0)))
-          (equalp (mlookat from to up)
+          (equalp (view-transform from to up)
                   +identity-matrix+))))
 
   (testing "transformation matrix looking in positive z direction"
     (ok (let* ((from (point 0 0 0))
                (to (point 0 0 1))
                (up (vectorr 0 1 0)))
-          (equalp (mlookat from to up)
+          (equalp (view-transform from to up)
                   (mscaling (vec -1 1 -1))))))
 
   (testing "transformation matrix moves the world"
     (ok (let* ((from (point 0 0 8))
                (to (point 0 0 0))
                (up (vectorr 0 1 0)))
-          (equalp (mlookat from to up)
+          (equalp (view-transform from to up)
                   (mtranslation (vec 0 0 -8))))))
 
   (testing "an arbitrary transformation matrix"
     (ok (let* ((from (point 1 3 2))
                (to (point 4 -2 8))
                (up (vectorr 1 1 0)))
-          (approximately (mlookat from to up)
+          (approximately (view-transform from to up)
               (MAT
-                -0.51449573 0.51449573 0.6859944 -2.4009802 0.7789241 0.61494005 0.122988015
-                -2.8697202 -0.35856858 0.59761435 -0.71713716 -2.3841858e-7 0.0 0.0 0.0 1.0))))))
+               -0.50709 0.50709 0.67612 -2.36643
+               0.76772 0.60609 0.12122 -2.82843
+               -0.35857 0.59761 -0.71714 0.0
+               0.0 0.0 0.0 1.0))))))
+
 (deftest camera-pixel
   (testing "pixel size for a horizontal canvas"
     (ok (approximately (camera-pixel-size (create-camera 200 125 (/ pi 2)))
@@ -69,7 +72,7 @@
                (to (point 0 0 0))
                (up (vectorr 0 1 0))
                (c (create-camera 11 11 (/ pi 2)
-                      (mlookat from to up))))
+                      (view-transform from to up))))
           (approximately (pixel-at (render c w) 5 5)
                          (color 0.38066 0.47583 0.2855))))))
 
