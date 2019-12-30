@@ -100,6 +100,13 @@
   "the normal vector on a plane is constant"
   (vectorr 0 1 0))
 
+(defmethod local-normal-at ((c cube) point)
+  (let ((maxc (max (abs (vx point)) (abs (vy point)) (abs (vz point)))))
+    (cond
+      ((= maxc (abs (vx point))) (vectorr (vx point) 0 0))
+      ((= maxc (abs (vy point))) (vectorr 0 (vy point) 0))
+      (t (vectorr 0 0 (vz point))))))
+
 (defun normal-at (shape world-point) 
   "wrapper for local-normal-at for all shapes"
   (let* ((inv (minv (shape-transform shape)))

@@ -1,5 +1,28 @@
 (use-package :raytracer)
 
+(defrender draw3 #P"~/dev/lisp/src/raytracer/sphere3.png"
+    (view-transform
+     (point 1 4 -30)
+     (point 1 1 0)
+     (vectorr 0 1 0))
+    (make-light
+     :position (point -10 10 -10)
+     :intensity (color 0.5 0.5 0.5))
+  ((make-plane +identity-matrix+ checkers)
+   (make-cube
+    (m* (translation 1 4 0)
+        (scaling 2 3 1))
+    (make-material :colour +blue+ :reflective 0.3))
+   (make-sphere
+    (m* (translation -2 3 -4)
+        (scaling 2 2 2))
+    (make-material :colour +red+ :refractive-index 2.0 :reflective 0.1)))
+   (checkers (make-material
+              :colour (color 1 0.1 0.1)
+              :specular 0
+              :reflective 0
+              :pattern (make-checkers-pattern +black+ +white+))))
+
 (defrender draw2 #P"~/dev/lisp/src/raytracer/sphere2.png"
   (view-transform
    (point 1 3 -14)

@@ -110,6 +110,11 @@
 
 (defun default-cube () (make-instance 'cube))
 
+(defun make-cube (transform material)
+  (make-instance 'cube
+                 :transform transform
+                 :material material))
+
 (defstruct world light shapes)
 
 (defun default-world ()

@@ -14,9 +14,11 @@
      #:+yellow+
      #:color
      #:create-camera
+     #:default-cube
      #:glass-sphere
      #:m*
      #:make-checkers-pattern
+     #:make-cube
      #:make-gradient-pattern
      #:make-light
      #:make-material

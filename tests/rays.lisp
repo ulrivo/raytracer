@@ -230,6 +230,28 @@
                     (ok (equalp n2 (vectorr 0 1 0)))
                     (ok (equalp n3 (vectorr 0 1 0)))))))
 
+(deftest normal-on-cube
+  (testing "the normal on the surface of a cube"
+    (let ((c (default-cube)))
+      (mapc (lambda (point normal)
+              (ok (equalp normal (normal-at c point))))
+            (list (point 1 0.5 -0.8)
+                  (point -1 -0.2 0.9)
+                  (point -0.4 1 -0.1)
+                  (point 0.3 -1 -0.7)
+                  (point -0.6 0.3 1)
+                  (point 0.4 0.4 -1)
+                  (point 1 1 1)
+                  (point -1 -1 -1))
+            (list (vectorr 1 0 0)
+                  (vectorr -1 0 0)
+                  (vectorr 0 1 0)
+                  (vectorr 0 -1 0)
+                  (vectorr 0 0 1)
+                  (vectorr 0 0 -1)
+                  (vectorr 1 0 0)
+                  (vectorr -1 0 0))))))
+
 (deftest reflection
     (testing "reflect a vector approaching at 45 degree"
              (ok (let* ((v (vectorr 1 -1 0))
