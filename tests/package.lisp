@@ -33,6 +33,7 @@
      #:computations-reflectv
      #:computations-tt
      #:computations-under-point
+     #:default-cube
      #:default-plane
      #:default-sphere
      #:default-world

@@ -106,6 +106,10 @@
                  :transform transform
                  :material material))
 
+(defclass cube (shape) ())
+
+(defun default-cube () (make-instance 'cube))
+
 (defstruct world light shapes)
 
 (defun default-world ()
