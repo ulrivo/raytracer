@@ -121,7 +121,25 @@
                          (vectorr 0 0 1)
                          (vectorr 0 0 1))
                    '(4 4 4 4 4 4 -1)
-                   '(6 6 6 6 6 6 1)))))
+                   '(6 6 6 6 6 6 1))))
+  (testing "A ray misses a cube"
+    (let ((c (default-cube)))
+      (mapc (lambda (origin direction)
+              (let ((r (make-ray :origin origin
+                                 :direction direction)))
+                (ng (intersect c r))))
+            (list (point -2 0 0)
+                  (point 0 -2 0)
+                  (point 0 0 -2)
+                  (point 2 0 2)
+                  (point 0 2 2)
+                  (point 2 2 0))
+            (list (vectorr 0.2673 0.5345 0.8018)
+                  (vectorr 0.8018 0.2673 0.5345)
+                  (vectorr 0.5345 0.8018 0.2673)
+                  (vectorr 0 0 -1)
+                  (vectorr 0 -1 0)
+                  (vectorr -1 0 0))))))
 
 (deftest hits
     (let ((s (default-sphere)))

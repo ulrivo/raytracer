@@ -26,23 +26,21 @@
 
 ;; answers an intersektion, for all shapes first convert ray into object space
 
-;; if direction = 0, answer nil for tmin and tmax
 (defun check-axis (origin direction)
   (let ((tmin-n (- -1 origin))
         (tmax-n (- 1 origin))
+        (infinity float-features:single-float-positive-infinity)
         tmin tmax)
-    (when (>= (abs direction) +epsilon+)
+    (if (>= (abs direction) +epsilon+)
+        (progn
           (setf tmin (/ tmin-n direction))
-          (setf tmax (/ tmax-n direction))
-          (when (> tmin tmax)
-            (rotatef tmin tmax)))
+          (setf tmax (/ tmax-n direction)))
+        (progn
+          (setf tmin (* tmin-n infinity))
+          (setf tmax (* tmax-n infinity))))
+    (when (> tmin tmax)
+      (rotatef tmin tmax))
     (values tmin tmax)))
-
-(defun min-wo-nil (xs)
-  (apply #'min (remove-if-not #'numberp xs)))
-
-(defun max-wo-nil (xs)
-  (apply #'max (remove-if-not #'numberp xs)))
 
 (defmethod local-intersect ((s sphere) ray)
   (let* ((sphere-to-ray (v- (ray-origin ray) (point 0 0 0)))
@@ -73,10 +71,12 @@
       (multiple-value-bind (ztmin ztmax)
           (check-axis (vz (ray-origin ray)) (vz (ray-direction ray)))
         (let
-            ((tmin (max-wo-nil (list xtmin ytmin ztmin)))
-             (tmax (min-wo-nil (list xtmax ytmax ztmax))))
-          (list (make-intersektion :tt tmin :object c)
-                (make-intersektion :tt tmax :object c)))))))
+            ((tmin (max xtmin ytmin ztmin))
+             (tmax (min xtmax ytmax ztmax)))
+          (if (> tmin tmax)
+              ()
+              (list (make-intersektion :tt tmin :object c)
+                    (make-intersektion :tt tmax :object c))))))))
 
 (defun intersect (shape ray)
   (let ((local-ray (transform ray (minv (shape-transform shape)))))
