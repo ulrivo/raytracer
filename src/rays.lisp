@@ -32,14 +32,11 @@
         (infinity float-features:single-float-positive-infinity)
         tmin tmax)
     (if (>= (abs direction) +epsilon+)
-        (progn
-          (setf tmin (/ tmin-n direction))
-          (setf tmax (/ tmax-n direction)))
-        (progn
-          (setf tmin (* tmin-n infinity))
-          (setf tmax (* tmax-n infinity))))
-    (when (> tmin tmax)
-      (rotatef tmin tmax))
+        (setf tmin (/ tmin-n direction)
+              tmax (/ tmax-n direction))
+        (setf tmin (* tmin-n infinity)
+              tmax (* tmax-n infinity)))
+    (when (> tmin tmax) (rotatef tmin tmax))
     (values tmin tmax)))
 
 (defmethod local-intersect ((s sphere) ray)
