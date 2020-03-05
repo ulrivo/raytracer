@@ -23,6 +23,22 @@ ln -s ~/path/to/my/projects ~/.local/share/common-lisp/source/
 
 ln -s ~/Dev/lisp/src/ ~/.local/share/common-lisp/source/
 
+#### different solution (by Mark Watson: Loving Lisp)
+
+* Create the file ∼/.config/common-lisp/source-registry.conf.d/projects.conf if
+  it does not exist on your system
+* Assuming that you have cloned the repository for this book
+(loving-common-lisp) in your home directory (if you have a special place where
+you clone git repos, adjust the following), edit this configuration file to look
+like this: 
+
+1 (:tree 
+2 (:home "loving-common-lisp/src/") 
+3 ) 
+
+This will make subdirectories of loving-common-lisp/src/ load-able by using
+Quicklisp.
+
 ### Start development in Slime
 
 (ql:quickload :raytracer)
